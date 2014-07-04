@@ -7,5 +7,6 @@
     <context:annotation-config />
 
     <import resource="data.xml" />
+    <import resource="../tiles/tiles-config.xml"/>
 
 </beans>

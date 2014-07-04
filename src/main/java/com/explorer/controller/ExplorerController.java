@@ -1,6 +1,9 @@
 package com.explorer.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -10,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ExplorerController {
 
+    @Autowired
+    private ApplicationContext context;
+
     @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public String viewFiles() {
+    public String viewFiles(ModelMap model) {
         return "files";
     }
 
