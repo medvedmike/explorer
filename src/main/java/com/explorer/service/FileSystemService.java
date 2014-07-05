@@ -1,0 +1,31 @@
+package com.explorer.service;
+
+import com.explorer.domain.DirectoryInfo;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.Collection;
+
+/**
+ * Created by Michael on 04.07.2014.
+ */
+@Service
+public class FileSystemService {
+
+    public File[] getDirectoryContent(String path) {
+        if (path == null)
+            return File.listRoots();
+        File dir = new File(path);
+        if (!dir.exists() && dir.isFile())
+            throw new RuntimeException("directory is not exists on a server");
+        return dir.listFiles();
+    }
+
+    public DirectoryInfo getDirectoryInfo(String path) {
+        if (path == null)
+            return new DirectoryInfo(null);
+        else
+            return new DirectoryInfo(new File(path));
+    }
+
+}

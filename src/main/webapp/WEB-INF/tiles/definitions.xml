@@ -5,11 +5,22 @@
 
     <definition name="template" template="/WEB-INF/pages/templates/main_template.jsp">
         <put-attribute name="header" value="/WEB-INF/pages/tiles/header.jsp"/>
+        <put-attribute name="content" value=""/>
         <put-attribute name="footer" value="/WEB-INF/pages/tiles/footer.jsp"/>
     </definition>
 
     <definition name="files" extends="template">
         <put-attribute name="content" value="/WEB-INF/pages/files.jsp"/>
     </definition>
+
+    <!--errors-->
+    <definition name="error404" extends="template">
+        <put-attribute name="content" value="/WEB-INF/pages/errors/404.jsp"/>
+    </definition>
+
+    <definition name="error500" extends="template">
+        <put-attribute name="content" value="/WEB-INF/pages/errors/500.jsp"/>
+    </definition>
+    <!--end errors-->
 
 </tiles-definitions>

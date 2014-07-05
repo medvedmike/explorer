@@ -3,6 +3,4 @@
     Created by Michael on 04.07.2014.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="header" id="header">
-    <h1><spring:message code="label.serviceName"/></h1>
-</div>
+<h1><spring:message code="label.serviceName"/></h1>
