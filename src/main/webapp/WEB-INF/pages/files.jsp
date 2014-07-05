@@ -27,9 +27,9 @@
             </c:when>
             <c:otherwise>
                 <div class="element row collapse">
-                    <span class="large-10 columns">
+                    <a class="large-10 columns" href="<c:url value="/file"><c:param name="name" value="${element.path}"/></c:url>">
                         <c:out value="${directory.root ? element.path : element.name}"/>
-                    </span>
+                    </a>
                     <span class="large-2 columns right-align">
                         <c:set var="size" value="${element.length()}"/>
                         <c:choose>

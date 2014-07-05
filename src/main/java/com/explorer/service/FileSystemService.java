@@ -4,6 +4,8 @@ import com.explorer.domain.DirectoryInfo;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Collection;
 
 /**
@@ -16,7 +18,7 @@ public class FileSystemService {
         if (path == null)
             return File.listRoots();
         File dir = new File(path);
-        if (!dir.exists() && dir.isFile())
+        if (!dir.exists() && dir.isFile()) //TODO custom exceptions
             throw new RuntimeException("directory is not exists on a server");
         return dir.listFiles();
     }
@@ -26,6 +28,13 @@ public class FileSystemService {
             return new DirectoryInfo(null);
         else
             return new DirectoryInfo(new File(path));
+    }
+
+    public File getFile(String name) {
+        File file = new File(name);
+        if (!file.exists() || file.isDirectory())
+            return null;
+        return file;
     }
 
 }
