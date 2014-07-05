@@ -9,6 +9,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,6 +70,34 @@ public class ExplorerController {
             outputStream.close();
             inputStream.close();
         }
+    }
+
+    @RequestMapping(value = "/file", method = RequestMethod.POST)
+    public @ResponseBody String uploadFile(@RequestParam(value = "file") MultipartFile file,
+                                           @RequestParam(value = "directory") String dir) {
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                File directory = new File(dir);
+                if (!directory.exists() || directory.isFile())
+                    throw new FileNotFoundException();
+                File serverFile = new File(directory.getAbsolutePath() + File.separator + file.getOriginalFilename());
+                if (serverFile.createNewFile()) {
+                    BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(serverFile));
+                    os.write(bytes);
+                    os.close();
+                    return "ok";
+                } else {
+                    return "can not create";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return e.getStackTrace()[0].toString();
+            }
+        } else {
+            return "empty file";
+        }
+//        return "redirect:/files?directory=" + dir;
     }
 
 

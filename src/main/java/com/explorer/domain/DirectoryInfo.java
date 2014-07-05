@@ -8,6 +8,7 @@ import java.io.File;
 public class DirectoryInfo {
 
     private String name;
+    private String path;
     private boolean root;
     private String parent;
 
@@ -23,12 +24,14 @@ public class DirectoryInfo {
         root = true;
         name = "root";
         parent = null;
+        path = null;
     }
 
     private void createDirectory(File file) {
         root = false;
         name = file.getParentFile() == null ? file.toString() : file.getName();
         parent = file.getParent();
+        path = file.getPath();
     }
 
     public String getName() {
@@ -41,5 +44,13 @@ public class DirectoryInfo {
 
     public String getParent() {
         return parent;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
