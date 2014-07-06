@@ -92,17 +92,14 @@ public class ExplorerController {
                 } else {
                     model.put("message", ((MessageSource)context.getBean("messageSource")).getMessage("error.create-file", new Object[0], request.getLocale()));
                     return "error";
-//                    return "can not create";
                 }
             } catch (IOException e) {
                 model.put("message", ((MessageSource)context.getBean("messageSource")).getMessage("error.internal", new Object[0], request.getLocale()));
                 return "error";
-//                return e.getStackTrace()[0].toString();
             }
         } else {
             model.put("message", ((MessageSource)context.getBean("messageSource")).getMessage("error.empty-file", new Object[0], request.getLocale()));
             return "error";
-//            return "empty file";
         }
     }
 
