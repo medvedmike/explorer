@@ -1,0 +1,26 @@
+* {
+    /*border: 1px solid #000000;*/
+}
+
+div.file {
+    background: #E6FFE6;
+}
+
+div.directory {
+    background: #E6E6FF;
+}
+
+div.file span.size {
+    text-align: right;
+}
+
+div.directory a.open {
+
+}
+
+div.element {
+    padding: 7px 5px;
+    -webkit-box-shadow: 0px 0px 2px #222;
+    -moz-box-shadow: 0px 0px 2px #222;
+    box-shadow: 0px 0px 2px #222;
+}

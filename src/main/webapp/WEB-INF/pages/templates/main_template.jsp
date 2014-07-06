@@ -11,6 +11,7 @@
     <title><spring:message code="label.serviceName"/></title>
     <link rel="stylesheet" href="<c:url value="/resources/css/foundation.min.css"/>">
     <link rel="stylesheet" href="<c:url value="/resources/css/normalize.css"/>">
+    <link rel="stylesheet" href="<c:url value="/resources/css/utils.css"/>">
 </head>
 <body>
     <div class="header row" id="header">

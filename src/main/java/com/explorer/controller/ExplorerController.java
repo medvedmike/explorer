@@ -73,7 +73,7 @@ public class ExplorerController {
     }
 
     @RequestMapping(value = "/file", method = RequestMethod.POST)
-    public @ResponseBody String uploadFile(@RequestParam(value = "file") MultipartFile file,
+    public String uploadFile(@RequestParam(value = "file") MultipartFile file,
                                            @RequestParam(value = "directory") String dir) {
         if (!file.isEmpty()) {
             try {
@@ -86,7 +86,7 @@ public class ExplorerController {
                     BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(serverFile));
                     os.write(bytes);
                     os.close();
-                    return "ok";
+                    return "redirect:/files?directory=" + dir;
                 } else {
                     return "can not create";
                 }
@@ -97,7 +97,6 @@ public class ExplorerController {
         } else {
             return "empty file";
         }
-//        return "redirect:/files?directory=" + dir;
     }
 
 
