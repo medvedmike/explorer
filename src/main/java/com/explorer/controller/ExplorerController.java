@@ -53,7 +53,7 @@ public class ExplorerController {
         if (file == null) {
             response.sendError(HttpStatus.NOT_FOUND.value());
         } else {
-            String mimeType = request.getServletContext().getMimeType(name);
+            String mimeType = request.getSession().getServletContext().getMimeType(name);
             if (mimeType == null) {
                 mimeType = "application/octet-stream";
             }
