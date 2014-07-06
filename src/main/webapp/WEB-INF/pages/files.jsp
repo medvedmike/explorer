@@ -10,7 +10,7 @@
 
     <nav class="breadcrumbs" id="breadcrumbs">
         <a class="current"><c:out value="${directory.name}"/></a>
-        <a data-dropdown="add-dropdown">+</a>
+        <c:if test="${directory.canWrite}"><a data-dropdown="add-dropdown">+</a></c:if>
     </nav>
 
     <div class="hor-separator-15"></div>

@@ -3,6 +3,7 @@ package com.explorer.controller;
 import com.explorer.service.FileSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -74,7 +75,8 @@ public class ExplorerController {
 
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam(value = "file") MultipartFile file,
-                                           @RequestParam(value = "directory") String dir) {
+                             @RequestParam(value = "directory") String dir,
+                             ModelMap model, final HttpServletRequest request) {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -88,14 +90,19 @@ public class ExplorerController {
                     os.close();
                     return "redirect:/files?directory=" + dir;
                 } else {
-                    return "can not create";
+                    model.put("message", ((MessageSource)context.getBean("messageSource")).getMessage("error.create-file", new Object[0], request.getLocale()));
+                    return "error";
+//                    return "can not create";
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-                return e.getStackTrace()[0].toString();
+                model.put("message", ((MessageSource)context.getBean("messageSource")).getMessage("error.internal", new Object[0], request.getLocale()));
+                return "error";
+//                return e.getStackTrace()[0].toString();
             }
         } else {
-            return "empty file";
+            model.put("message", ((MessageSource)context.getBean("messageSource")).getMessage("error.empty-file", new Object[0], request.getLocale()));
+            return "error";
+//            return "empty file";
         }
     }
 

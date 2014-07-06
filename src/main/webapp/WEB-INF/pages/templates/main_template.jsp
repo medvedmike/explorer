@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/utils.css"/>">
 </head>
 <body>
-    <div class="header row" id="header">
+    <div class="header row text-center" id="header">
         <tiles:insertAttribute name="header"/>
     </div>
     <div class="content row" id="content">
