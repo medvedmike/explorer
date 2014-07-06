@@ -58,7 +58,7 @@ public class ExplorerController {
                 mimeType = "application/octet-stream";
             }
             response.setContentType(mimeType);
-            response.setContentLengthLong(file.length());
+            response.setContentLength((int)file.length());
             response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
             InputStream inputStream = new FileInputStream(file);
             OutputStream outputStream = response.getOutputStream();
