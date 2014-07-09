@@ -6,7 +6,11 @@
 
     <context:annotation-config />
 
+    <context:component-scan base-package="com.explorer.dao"/>
+    <context:component-scan base-package="com.explorer.service"/>
+
     <import resource="data.xml" />
+    <import resource="security.xml"/>
     <import resource="../tiles/tiles-config.xml"/>
 
 </beans>

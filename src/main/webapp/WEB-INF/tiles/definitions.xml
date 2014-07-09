@@ -13,6 +13,10 @@
         <put-attribute name="content" value="/WEB-INF/pages/files.jsp"/>
     </definition>
 
+    <!--<definition name="register" extends="template">-->
+        <!--<put-attribute name="content" value="/WEB-INF/pages/register.jsp"/>-->
+    <!--</definition>-->
+
     <!--errors-->
     <definition name="error" extends="template">
         <put-attribute name="content" value="/WEB-INF/pages/errors/text_error.jsp"/>

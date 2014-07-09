@@ -14,14 +14,14 @@
     <link rel="stylesheet" href="<c:url value="/resources/css/utils.css"/>">
 </head>
 <body>
-    <div class="header row text-center" id="header">
+    <div style="margin-bottom: 15px;" class="header text-center" id="header">
         <tiles:insertAttribute name="header"/>
     </div>
-    <div class="content row" id="content">
+    <div class="content" id="content">
         <tiles:insertAttribute name="content"/>
     </div>
     <hr/>
-    <div class="footer row" id="footer">
+    <div class="footer" id="footer">
         <tiles:insertAttribute name="footer"/>
     </div>
     <script type="text/javascript" src="<c:url value="/resources/js/jquery-1.11.1.min.js"/>"></script>

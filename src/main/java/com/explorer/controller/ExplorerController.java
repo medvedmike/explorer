@@ -29,6 +29,14 @@ public class ExplorerController {
     @Autowired
     private FileSystemService fileSystem;
 
+    @RequestMapping(value = "/files", method = RequestMethod.GET, params = {"home"})
+    public String viewHome(ModelMap model) {
+        File f = fileSystem.getWorkingDirectory();
+        model.put("content", fileSystem.getDirectoryContent(f.getPath()));
+        model.put("directory", fileSystem.getDirectoryInfo(f.getPath()));
+        return "files";
+    }
+
     @RequestMapping(value = "/files", method = RequestMethod.GET)
     public String viewFiles(@RequestParam(value = "directory", required = false) String directoryName, ModelMap model) {
         if (directoryName != null && directoryName.compareTo("") == 0) {

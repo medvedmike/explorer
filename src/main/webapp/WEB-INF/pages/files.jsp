@@ -8,13 +8,15 @@
 
 <c:if test="${!directory.root}">
 
-    <nav class="breadcrumbs" id="breadcrumbs">
-        <c:forEach items="${directory.breadcrumbs}" var="crumb">
-            <a href="<c:url value="/files"><c:param name="directory" value="${crumb.path}"/></c:url>"><c:out value="${crumb.name}"/></a>
-        </c:forEach>
-        <a class="current"><c:out value="${directory.name}"/></a>
-        <c:if test="${directory.canWrite}"><a data-dropdown="add-dropdown">+</a></c:if>
-    </nav>
+    <div class="row">
+        <nav class="breadcrumbs" id="breadcrumbs">
+            <c:forEach items="${directory.breadcrumbs}" var="crumb">
+                <a href="<c:url value="/files"><c:param name="directory" value="${crumb.path}"/></c:url>"><c:out value="${crumb.name}"/></a>
+            </c:forEach>
+            <a class="current"><c:out value="${directory.name}"/></a>
+            <c:if test="${directory.canWrite}"><a data-dropdown="add-dropdown">+</a></c:if>
+        </nav>
+    </div>
 
     <div class="hor-separator-15"></div>
 

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 
 /**
@@ -35,6 +37,15 @@ public class FileSystemService {
         if (!file.exists() || file.isDirectory())
             return null;
         return file;
+    }
+
+    public File getWorkingDirectory() {
+        File directory = new File(System.getProperty("user.home") + File.separator + "explorer home");
+        if (!directory.exists()) {
+            directory.mkdirs();
+            directory.mkdir();
+        }
+        return directory;
     }
 
 }
