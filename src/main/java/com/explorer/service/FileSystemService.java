@@ -28,8 +28,8 @@ public class FileSystemService {
 
     public Directory getDirectoryHome(String path, String username) throws IOException {
         Path userdir = Paths.get(getWorkingDirectoryName().toString(), username);
-        Path p = Paths.get(userdir.toString(), path);
-        if (!p.toRealPath().startsWith(userdir))
+        Path p = Paths.get(userdir.toString(), path).toRealPath();
+        if (!p.startsWith(userdir))
             throw new AccessDeniedException();
         return new RelativeDirectory(p, userdir);
     }
@@ -38,8 +38,8 @@ public class FileSystemService {
         if (path.equals("")) {
             return new AbsoluteDirectory(null);
         }
-        Path p = Paths.get(path);
-        if (Files.exists(p) || !Files.isDirectory(p))
+        Path p = Paths.get(path).toRealPath();
+        if (!Files.exists(p) || !Files.isDirectory(p))
             throw new DirectoryNotFoundException();
         return new AbsoluteDirectory(p);
     }

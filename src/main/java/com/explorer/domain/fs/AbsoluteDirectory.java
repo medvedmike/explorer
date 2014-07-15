@@ -24,7 +24,7 @@ public class AbsoluteDirectory implements Directory {
         if (!root) {
             path = file;
             Stream<Path> list = Files.list(file);
-            children = new ArrayList<>((int) list.count());
+            children = new ArrayList<>();
             list.forEach(new Consumer<Path>() {
                 @Override
                 public void accept(Path path) {
@@ -34,7 +34,7 @@ public class AbsoluteDirectory implements Directory {
         } else {
             path = null;
             Stream<File> list = Arrays.stream(File.listRoots());
-            children = new ArrayList<>((int) list.count());
+            children = new ArrayList<>();
             list.forEach(new Consumer<File>() {
                 @Override
                 public void accept(File file) {
@@ -63,7 +63,8 @@ public class AbsoluteDirectory implements Directory {
 
     @Override
     public FileInfo[] getChildren() {
-        return (FileInfo[]) children.toArray();
+        FileInfo[] res = new FileInfo[children.size()];
+        return children.toArray(res);
     }
 
     @Override

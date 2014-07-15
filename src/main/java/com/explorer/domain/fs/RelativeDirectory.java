@@ -57,7 +57,7 @@ public class RelativeDirectory implements Directory {
 
     @Override
     public String getParent() {
-        if (/*path.startsWith(relate) && path.compareTo(relate) > 0*/path != null) {
+        if (path != null) {
             Path parent = path.getParent();
             if (parent != null)
                 return parent.toString();

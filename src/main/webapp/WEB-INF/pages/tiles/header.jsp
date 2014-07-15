@@ -10,13 +10,16 @@
     <nav class="top-bar" data-topbar>
         <ul class="title-area">
             <li class="name">
-                <h1><a href="<c:url value="/files"/>"><spring:message code="label.serviceName"/></a></h1>
+                <h1><a href="<c:url value="/home"/>"><spring:message code="label.serviceName"/></a></h1>
             </li>
             <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
         </ul>
 
         <section class="top-bar-section">
             <ul class="left">
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <li><a href="<c:url value="/server"/>">Server</a></li>
+                </sec:authorize>
             </ul>
 
             <ul class="right">
