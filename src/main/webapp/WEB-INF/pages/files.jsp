@@ -8,15 +8,17 @@
 
 <c:if test="${!directory.root}">
 
-    <div class="row">
-        <nav class="breadcrumbs" id="breadcrumbs">
-            <c:forEach items="${directory.breadcrumbs}" var="crumb">
-                <a href="<c:url value="/files"><c:param name="directory" value="${crumb.path}"/></c:url>"><c:out value="${crumb.name}"/></a>
-            </c:forEach>
-            <a class="current"><c:out value="${directory.name}"/></a>
-            <c:if test="${directory.canWrite}"><a data-dropdown="add-dropdown">+</a></c:if>
-        </nav>
-    </div>
+    <%--<c:if test="${!empty directory.breadcrumbs}">--%>
+    <%--<div class="row">--%>
+        <%--<nav class="breadcrumbs" id="breadcrumbs">--%>
+            <%--<c:forEach items="${directory.breadcrumbs}" var="crumb">--%>
+                <%--<a href="<c:url value="/${url}"><c:param name="path" value="${crumb.path}"/></c:url>"><c:out value="${crumb.name}"/></a>--%>
+            <%--</c:forEach>--%>
+            <%--&lt;%&ndash;<a class="current"><c:out value="${directory.name}"/></a>&ndash;%&gt;--%>
+            <%--<c:if test="${directory.canWrite}"><a data-dropdown="add-dropdown">+</a></c:if>--%>
+        <%--</nav>--%>
+    <%--</div>--%>
+    <%--</c:if>--%>
 
     <div class="hor-separator-15"></div>
 
@@ -65,29 +67,31 @@
 
     <c:if test="${!directory.root}">
         <div class="element directory row collapse">
-            <a class="large-10 columns" href="<c:url value="/files"><c:if test="${directory.parent != null}"><c:param name="directory" value="${directory.parent}"/></c:if></c:url>">
+            <a class="large-10 columns" href="<c:url value="/${url}"><c:if test="${directory.parent != null}"><c:param name="path" value="${directory.parent}"/></c:if></c:url>">
                 ../
             </a>
         </div>
     </c:if>
 
-    <c:forEach items="${content}" var="element">
+    <c:forEach items="${directory.children}" var="element">
         <c:choose>
-            <c:when test="${element.directory}">
+            <c:when test="${!element.file}">
                 <div class="element directory row collapse">
-                    <a class="large-10 columns open" href="<c:url value="/files"><c:param name="directory" value="${element.path}"/></c:url>">
-                        <c:out value="${directory.root? element.path : element.name}"/>
+                    <a class="large-10 columns open" href="<c:url value="/${url}"><c:param name="path" value="${element.path}"/></c:url>">
+                        <%--<c:out value="${directory.root? element.path : element.name}"/>--%>
+                            <c:out value="${element.name}"/>
                     </a>
                 </div>
             </c:when>
             <c:otherwise>
                 <c:if test="${!directory.root}">
                     <div class="element file row collapse">
-                        <a class="large-10 columns" href="<c:url value="/file"><c:param name="name" value="${element.path}"/></c:url>">
-                            <c:out value="${directory.root ? element.path : element.name}"/>
+                        <a class="large-10 columns" href="<c:url value="${url}/file"><c:param name="name" value="${element.path}"/></c:url>">
+                            <%--<c:out value="${directory.root ? element.path : element.name}"/>--%>
+                            <c:out value="${element.name}"/>
                         </a>
                         <span class="large-2 columns right-align size">
-                            <c:set var="size" value="${element.length()}"/>
+                            <c:set var="size" value="${element.size}"/>
                             <c:choose>
                                 <c:when test="${size < 1000}">
                                     <c:out value="${size}"/> b

@@ -1,6 +1,7 @@
 package com.explorer.controller;
 
 import com.explorer.service.FileSystemService;
+import com.explorer.service.exceptions.DirectoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -21,7 +22,8 @@ import java.io.*;
  * Created by Michael on 01.07.2014.
  */
 @Controller
-public class ExplorerController {
+@RequestMapping("/server")
+public class ServerController {
 
     @Autowired
     private ApplicationContext context;
@@ -29,27 +31,12 @@ public class ExplorerController {
     @Autowired
     private FileSystemService fileSystem;
 
-    @RequestMapping(value = "/files", method = RequestMethod.GET, params = {"home"})
-    public String viewHome(ModelMap model) {
-        File f = fileSystem.getWorkingDirectory();
-        model.put("content", fileSystem.getDirectoryContent(f.getPath()));
-        model.put("directory", fileSystem.getDirectoryInfo(f.getPath()));
+    @RequestMapping(method = RequestMethod.GET)
+    public String viewFiles(@RequestParam(value = "path", required = false, defaultValue = "") String path,
+                            ModelMap model) throws IOException {
+        model.put("url", "server");
+        model.put("directory", fileSystem.getDirectoryGlobal(path));
         return "files";
-    }
-
-    @RequestMapping(value = "/files", method = RequestMethod.GET)
-    public String viewFiles(@RequestParam(value = "directory", required = false) String directoryName, ModelMap model) {
-        if (directoryName != null && directoryName.compareTo("") == 0) {
-            directoryName = null;
-        }
-        model.put("content", fileSystem.getDirectoryContent(directoryName));
-        model.put("directory", fileSystem.getDirectoryInfo(directoryName));
-        return "files";
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String home() {
-        return "redirect:/files";
     }
 
     private static final int BUFFER_SIZE = 4096;

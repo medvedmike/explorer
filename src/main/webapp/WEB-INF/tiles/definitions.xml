@@ -13,6 +13,9 @@
         <put-attribute name="content" value="/WEB-INF/pages/files.jsp"/>
     </definition>
 
+    <definition name="index" extends="template">
+        <put-attribute name="content" value="/index-data.jsp"/>
+    </definition>
     <!--<definition name="register" extends="template">-->
         <!--<put-attribute name="content" value="/WEB-INF/pages/register.jsp"/>-->
     <!--</definition>-->

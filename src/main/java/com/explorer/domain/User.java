@@ -5,6 +5,7 @@ package com.explorer.domain;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Created by Michael on 08.07.2014.
@@ -32,6 +33,12 @@ public class User {
     @Size(min = 6, max = 20, message = "inputError.password.length")
     private String password;
 
+    @Column(name = homeColumn, nullable = false)
+    private String home;
+
+    @ManyToMany
+    private List<Role> authority;
+
     public Integer getId() {
         return id;
     }
@@ -54,5 +61,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Role> getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(List<Role> authority) {
+        this.authority = authority;
+    }
+
+    public String getHome() {
+        return home;
+    }
+
+    public void setHome(String home) {
+        this.home = home;
     }
 }

@@ -1,31 +1,36 @@
 <?xml  version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:security="http://www.springframework.org/schema/security"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <security:http access-denied-page="/WEB-INF/pages/errors/403.jsp" auto-config="true">
-        <security:intercept-url pattern="/**" access="ROLE_USER, ROLE_ANONYMOUS"/>
+        <!--<security:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER"/>-->
+        <security:intercept-url pattern="/" access="ROLE_USER, ROLE_ANONYMOUS"/>
+        <security:intercept-url pattern="/index*" access="ROLE_USER, ROLE_ANONYMOUS"/>
+        <security:intercept-url pattern="/home*" access="ROLE_USER"/>
+        <security:intercept-url pattern="/shared*" access="ROLE_USER"/>
+        <security:intercept-url pattern="/server*" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/users*" access="ROLE_ADMIN"/>
+
         <security:form-login login-processing-url="/j_spring_security_check"
                 login-page="/login"
-                default-target-url="/files"
+                default-target-url="/home"
                 authentication-failure-url="/login?error"/>
-        <security:logout logout-url="/logout" logout-success-url="/files" />
+        <security:logout logout-url="/logout" logout-success-url="/" />
+
         <security:anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />
+        <security:remember-me user-service-ref="userService"/>
     </security:http>
 
     <security:authentication-manager>
-        <!--<security:authentication-provider user-service-ref="customUserDetailsService">-->
-            <!--<security:user-service>-->
-                <!--<security:user name="admin" password="password" authorities="ROLE_ADMIN,ROLE_USER"/>-->
-            <!--</security:user-service>-->
         <security:authentication-provider>
-            <security:jdbc-user-service data-source-ref="dataSource"
+            <security:jdbc-user-service id="userService" data-source-ref="dataSource"
                     users-by-username-query="select username, password, true from users where username=?"
                     authorities-by-username-query="select u.username, r.role
-                        from authorities a join roles r
-                            on r.id = a.role_id
-                            join users u on u.id = a.user_id
+                        from users_roles a join roles r
+                            on r.id = a.authority_id
+                            join users u on u.id = a.users_id
                         where u.username=?"/>
             <security:password-encoder hash="md5">
                 <security:salt-source user-property="username"/>
@@ -34,5 +39,4 @@
     </security:authentication-manager>
 
     <bean id="webexpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
-    <!--<bean id="customUserDetailsService" class="com.explorer.service.CustomUserDetailsService"/>-->
 </beans>

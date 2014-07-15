@@ -24,14 +24,14 @@
                     <li><a class="button" href="<c:url value="/login"/>"><spring:message code="label.signIn"/></a></li>
                     <li><a class="button alert" href="<c:url value="/signup"/>"><spring:message code="label.signUp"/></a></li>
                 </sec:authorize>
-                <%--<sec:authorize access="isAuthentificated()">--%>
+                <sec:authorize access="isAuthenticated()">
                     <li class="has-dropdown">
                         <a href="#">Settings</a>
                         <ul class="dropdown">
                             <li><a href="<c:url value="/logout"/>">Sign out</a></li>
                         </ul>
                     </li>
-                <%--</sec:authorize>--%>
+                </sec:authorize>
             </ul>
         </section>
     </nav>
