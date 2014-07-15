@@ -16,7 +16,7 @@
         <security:form-login login-processing-url="/j_spring_security_check"
                 login-page="/login"
                 default-target-url="/home"
-                authentication-failure-url="/login?error"/>
+                authentication-failure-url="/login?error=auth"/>
         <security:logout logout-url="/logout" logout-success-url="/" />
 
         <security:anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />

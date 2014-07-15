@@ -6,5 +6,6 @@
     <session-factory>
         <mapping class="com.explorer.domain.User"/>
         <mapping class="com.explorer.domain.Role"/>
+        <mapping class="com.explorer.domain.SharedPath"/>
     </session-factory>
 </hibernate-configuration>

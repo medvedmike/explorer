@@ -52,7 +52,7 @@ public class RelativeDirectory implements Directory {
 
     @Override
     public String getName() {
-        return path.getFileName().toString();
+        return path == null ? relate.getFileName().toString() : path.getFileName().toString();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class RelativeDirectory implements Directory {
 
     @Override
     public boolean isRoot() {
-        return root;
+        return false; //TODO hack
     }
 
     @Override

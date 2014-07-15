@@ -9,15 +9,15 @@
 <c:if test="${!directory.root}">
 
     <%--<c:if test="${!empty directory.breadcrumbs}">--%>
-    <%--<div class="row">--%>
-        <%--<nav class="breadcrumbs" id="breadcrumbs">--%>
+    <div class="row">
+        <nav class="breadcrumbs" id="breadcrumbs">
             <%--<c:forEach items="${directory.breadcrumbs}" var="crumb">--%>
                 <%--<a href="<c:url value="/${url}"><c:param name="path" value="${crumb.path}"/></c:url>"><c:out value="${crumb.name}"/></a>--%>
             <%--</c:forEach>--%>
-            <%--&lt;%&ndash;<a class="current"><c:out value="${directory.name}"/></a>&ndash;%&gt;--%>
-            <%--<c:if test="${directory.canWrite}"><a data-dropdown="add-dropdown">+</a></c:if>--%>
-        <%--</nav>--%>
-    <%--</div>--%>
+            <a class="current"><c:out value="${directory.name}"/></a>
+            <c:if test="${directory.writable}"><a data-dropdown="add-dropdown">+</a></c:if>
+        </nav>
+    </div>
     <%--</c:if>--%>
 
     <div class="hor-separator-15"></div>
@@ -49,7 +49,7 @@
         <a class="close-reveal-modal">&#215;</a>
         <div class="hor-separator-20"></div>
         <div class="row collapse">
-            <form data-abide action="<c:url value="/file"/>" method="post" enctype="multipart/form-data">
+            <form data-abide action="<c:url value="${url}/file"/>" method="post" enctype="multipart/form-data">
                 <div class="columns small-9">
                     <input style="display: none;" type="text" name="directory" value="${directory.path}">
                     <input type="file" name="file" required>

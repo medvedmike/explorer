@@ -11,6 +11,11 @@
             <form data-abide method="post" action="<c:url value="/j_spring_security_check"/>">
             <fieldset class="">
                 <legend>Sign in</legend>
+                <c:if test="${!empty param.error}">
+                    <div class="alert-box alert">
+                        Login or password are incorrect
+                    </div>
+                </c:if>
                 <label for="username"><spring:message code="label.login"/>
                     <input type="text" name="j_username" id="username" placeholder="<spring:message code="label.login"/>" required/>
                 </label>

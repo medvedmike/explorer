@@ -27,12 +27,6 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private FileSystemService fileSystem;
-
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signUp(ModelMap model) {
         model.addAttribute(new User());
@@ -55,17 +49,6 @@ public class UsersController {
             model.put("errorCode", "inputError.loginExists");
             return "../../register";
         }
-        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        newUser.setPassword(encoder.encodePassword(newUser.getPassword(), newUser.getUsername()));
-
-        Role userRole = roleService.getRole("ROLE_USER");
-        List<Role> roles = new ArrayList<>();
-        roles.add(userRole);
-        newUser.setAuthority(roles);
-
-        File dir = fileSystem.createUserDirectory(newUser.getUsername());
-        newUser.setHome(dir.getAbsolutePath());
-
         userService.saveUser(newUser);
         return "redirect:/home";
     }

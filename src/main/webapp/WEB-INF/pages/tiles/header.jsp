@@ -24,8 +24,7 @@
 
             <ul class="right">
                 <sec:authorize access="!isAuthenticated()">
-                    <li><a class="button" href="<c:url value="/login"/>"><spring:message code="label.signIn"/></a></li>
-                    <li><a class="button alert" href="<c:url value="/signup"/>"><spring:message code="label.signUp"/></a></li>
+                    <li class="has-form"><a class="button alert" href="<c:url value="/signup"/>"><spring:message code="label.signUp"/></a></li>
                 </sec:authorize>
                 <sec:authorize access="isAuthenticated()">
                     <li class="has-dropdown">
