@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -57,14 +58,24 @@ public class FileSystemService {
         if (path.equals("")) {
             return new SharedDirectory(paths);
         } else {
-            final Path p = Paths.get(path).toRealPath();
-            if (paths.stream().anyMatch(new Predicate<SharedPath>() {
+            final Path p = Paths.get(path).toRealPath(); //TODO lolwhat??
+            final Path[] current = new Path[1];
+            paths.forEach(new Consumer<SharedPath>() {
                 @Override
-                public boolean test(SharedPath sharedPath) {
-                    return p.startsWith(sharedPath.getPath());
+                public void accept(SharedPath sharedPath) {
+                    if (p.startsWith(sharedPath.getPath())) {
+                        if (current[0] == null)
+                            current[0] = Paths.get(sharedPath.getPath());
+                        else {
+                            Path cur = Paths.get(sharedPath.getPath());
+                            if (current[0].compareTo(cur) < 0)
+                                current[0] = cur;
+                        }
+                    }
                 }
-            })) {
-                return new SharedDirectory(path);
+            });
+            if (current[0] != null) {
+                return new SharedDirectory(current[0], path);
             } else {
                 throw new AccessDeniedException();
             }

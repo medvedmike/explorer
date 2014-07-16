@@ -14,6 +14,8 @@ import java.util.function.Consumer;
  */
 public class SharedDirectory extends AbsoluteDirectory {
 
+    private Path parentPath;
+
     public SharedDirectory(List<SharedPath> sharedPaths) {
         path = null;
         root = true;
@@ -30,7 +32,16 @@ public class SharedDirectory extends AbsoluteDirectory {
         });
     }
 
-    public SharedDirectory(String path) throws IOException {
+    public SharedDirectory(Path parentPath, String path) throws IOException {
         super(Paths.get(path));
+        this.parentPath = parentPath;
+    }
+
+    @Override
+    public String getParent() {
+        if (path == null) return null;
+        if (path.compareTo(parentPath) <= 0)
+            return "";
+        return super.getParent();
     }
 }
