@@ -20,6 +20,9 @@
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li><a href="<c:url value="/server"/>">Server</a></li>
                 </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <li><a href="<c:url value="/shared"/>">Shared</a></li>
+                </sec:authorize>
             </ul>
 
             <ul class="right">

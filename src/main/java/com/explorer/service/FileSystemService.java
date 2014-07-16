@@ -1,10 +1,13 @@
 package com.explorer.service;
 
+import com.explorer.domain.SharedPath;
 import com.explorer.domain.fs.AbsoluteDirectory;
 import com.explorer.domain.fs.Directory;
 import com.explorer.domain.fs.RelativeDirectory;
+import com.explorer.domain.fs.SharedDirectory;
 import com.explorer.service.exceptions.AccessDeniedException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -13,6 +16,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Created by Michael on 04.07.2014.
@@ -21,6 +26,9 @@ import java.nio.file.Paths;
 public class FileSystemService {
 
     private static Path workingHome;
+
+    @Autowired
+    private SharedPathService sharedPathService;
 
     public Directory getDirectoryGlobal(String path) throws IOException {
         return getDirectoryAbsolute(path);
@@ -44,6 +52,24 @@ public class FileSystemService {
         return new AbsoluteDirectory(p);
     }
 
+    public Directory getSharedDirectory(String path, String username) throws IOException {
+        List<SharedPath> paths = sharedPathService.getPathsByTargetUsername(username);
+        if (path.equals("")) {
+            return new SharedDirectory(paths);
+        } else {
+            final Path p = Paths.get(path).toRealPath();
+            if (paths.stream().anyMatch(new Predicate<SharedPath>() {
+                @Override
+                public boolean test(SharedPath sharedPath) {
+                    return p.startsWith(sharedPath.getPath());
+                }
+            })) {
+                return new SharedDirectory(path);
+            } else {
+                throw new AccessDeniedException();
+            }
+        }
+    }
 //    private List<DirectoryInfo.BreadCrumb> getBreadcrumbs(Path path, String start) {
 //        int max = path.getNameCount();
 //        List<DirectoryInfo.BreadCrumb> breadcrumbs = new ArrayList<>(max);

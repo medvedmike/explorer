@@ -12,7 +12,8 @@ public class SharedPath {
 
     public static final String idColumn = "id";
     public static final String pathColumn = "path";
-    public static final String userColumn = "user_id";
+    public static final String targetUserColumn = "target_user_id";
+    public static final String sourceUserColumn = "source_user_id";
 
     @Id
     @Column(name = idColumn)
@@ -23,8 +24,12 @@ public class SharedPath {
     private String path;
 
     @ManyToOne
-    @JoinColumn(name = userColumn, nullable = false)
-    private User user;
+    @JoinColumn(name = targetUserColumn, nullable = false)
+    private User targetUser;
+
+    @ManyToOne
+    @JoinColumn(name = sourceUserColumn, nullable = false)
+    private User sourceUser;
 
     public Integer getId() {
         return id;
@@ -42,11 +47,19 @@ public class SharedPath {
         this.path = path;
     }
 
-    public User getUser() {
-        return user;
+    public User getTargetUser() {
+        return targetUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setTargetUser(User targetUser) {
+        this.targetUser = targetUser;
+    }
+
+    public User getSourceUser() {
+        return sourceUser;
+    }
+
+    public void setSourceUser(User sourceUser) {
+        this.sourceUser = sourceUser;
     }
 }

@@ -1,10 +1,13 @@
 package com.explorer.controller;
 
+import com.explorer.domain.SharedPath;
 import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
+import com.explorer.service.SharedPathService;
+import com.explorer.service.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -18,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 
 /**
  * Created by Michael on 01.07.2014.
@@ -31,6 +35,9 @@ public class ServerController {
 
     @Autowired
     private FileSystemService fileSystem;
+
+    @Autowired
+    private SharedPathService sharedPathService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String viewFiles(@RequestParam(value = "path", required = false, defaultValue = "") String path,
@@ -68,5 +75,18 @@ public class ServerController {
         }
     }
 
+    @RequestMapping(value = "/share", method = RequestMethod.POST, params = {"username", "path"})
+    public String shareFile(@RequestParam(value = "username", required = true) String targetUsername,
+                            @RequestParam(value = "path", required = true) String sharedPath,
+                            Principal principal, ModelMap model) {
+        try {
+            sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
+            model.put("message", "Shared successfully");
+            return "redirect:/server?path=" + sharedPath;
+        } catch (UserNotFoundException e) {
+            model.put("message", "Share error. User not found");
+            return "redirect:/server?path=" + sharedPath;
+        }
+    }
 
 }

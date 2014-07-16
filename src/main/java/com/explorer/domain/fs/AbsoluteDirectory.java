@@ -15,9 +15,11 @@ import java.util.stream.Stream;
  */
 public class AbsoluteDirectory implements Directory {
 
-    private Path path;
-    private boolean root;
-    private List<FileInfo> children;
+    protected Path path;
+    protected boolean root;
+    protected List<FileInfo> children;
+
+    protected AbsoluteDirectory() {}
 
     public AbsoluteDirectory(Path file) throws IOException {
         root = file == null;
