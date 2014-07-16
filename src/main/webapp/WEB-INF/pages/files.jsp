@@ -8,73 +8,57 @@
 
 <c:if test="${!directory.root}">
 
+    <div class="control-panel row">
+        <div class="columns large-4 clearfix">
+            <span class="header left"><c:out value="${directory.name}"/></span>
+        </div>
+        <div class="columns large-8 clearfix">
+            <c:if test="${directory.writable}">
+                <a class="button dropdown tiny right" data-dropdown="upload-dropdown">Upload file</a>
+                <a class="button dropdown tiny right" data-dropdown="mkdir-dropdown">Create directory</a>
+            </c:if>
+            <a href="#" class="button dropdown tiny right" data-dropdown="share-dropdown">Share</a>
+            <a href="#" class="button dropdown tiny right" data-dropdown="share-dropdown">Download zip</a>
+        </div>
+    </div>
+
     <%--<c:if test="${!empty directory.breadcrumbs}">--%>
     <div class="row">
-        <nav class="breadcrumbs columns large-8" id="breadcrumbs">
+        <nav class="breadcrumbs columns large-12" id="breadcrumbs">
             <%--<c:forEach items="${directory.breadcrumbs}" var="crumb">--%>
                 <%--<a href="<c:url value="/${url}"><c:param name="path" value="${crumb.path}"/></c:url>"><c:out value="${crumb.name}"/></a>--%>
             <%--</c:forEach>--%>
             <a class="current"><c:out value="${directory.name}"/></a>
             <%--<c:if test="${directory.writable}"><a data-dropdown="add-dropdown">+</a></c:if>--%>
         </nav>
-        <div class="columns large-4 clearfix">
-            <a href="#" class="button dropdown tiny right" data-dropdown="share-dropdown">Upload</a>
-            <a href="#" class="button dropdown tiny right" data-dropdown="share-dropdown">Share</a>
-        </div>
     </div>
+
+    <div class="hor-separator-15"></div>
     <%--</c:if>--%>
-
-    <ul id="directory-tools" data-dropdown-content class="f-dropdown">
-        <c:if test="${directory.writable}">
-            <li><a data-reveal-id="upload-form">Upload file</a></li>
-            <li><a data-reveal-id="mkdir-form">Create directory</a></li>
-        </c:if>
-        <li><a data-options="align:left" data-dropdown="share-dropdown">Share this folder</a></li>
-        <li><a>Download zip</a></li>
-    </ul>
-
-    <%--<div class="hor-separator-15"></div>--%>
 
     <div class="f-dropdown content" data-dropdown-content id="share-dropdown">
         <form method="post" action="<c:url value="${url}/share"/> ">
             <input type="text" placeholder="username" name="username">
             <input type="text" name="path" value="<c:out value="${directory.path}"/>" style="display: none;">
-            <button type="submit">Share</button>
+            <input class="button" type="submit" value="Share">
         </form>
     </div>
 
-    <div data-reveal class="reveal-modal tiny" id="mkdir-form">
-        <a class="close-reveal-modal">&#215;</a>
-        <div class="hor-separator-20"></div>
-        <div class="row collapse">
-            <form data-abide>
-                <div class="columns small-9">
-                    <label>Directory name
-                        <input type="text" required pattern="[a-zA-Z0-9а-яА-Я]+">
-                    </label>
-                    <small class="error">Folder name must contain only letters and numbers.</small>
-                </div>
-                <div class="columns small-3">
-                    <input class="button" type="submit" value="Create">
-                </div>
-            </form>
-        </div>
+    <div class="f-dropdown content" data-dropdown-content id="mkdir-dropdown">
+        <form data-abide>
+            <input type="text" required placeholder="folder name">
+            <small class="error">Folder name required.</small>
+            <input class="button" type="submit" value="Create">
+        </form>
     </div>
 
-    <div data-reveal class="reveal-modal tiny" id="upload-form">
-        <a class="close-reveal-modal">&#215;</a>
-        <div class="row collapse clearfix">
-            <form data-abide action="<c:url value="${url}/file"/>" method="post" enctype="multipart/form-data">
-                <div class="columns small-12">
-                    <input style="display: none;" type="text" name="directory" value="${directory.path}">
-                    <input type="file" name="file" required>
-                    <small class="error">You must select a file.</small>
-                </div>
-                <div class="columns small-12">
-                    <input class="button" type="submit" value="Upload">
-                </div>
-            </form>
-        </div>
+    <div class="f-dropdown content small" data-dropdown-content id="upload-dropdown">
+        <form data-abide action="<c:url value="${url}/file"/>" method="post" enctype="multipart/form-data">
+            <input style="display: none;" type="text" name="directory" value="${directory.path}">
+            <input type="file" name="file" required>
+            <small class="error">You must select a file.</small>
+            <input class="button" type="submit" value="Upload">
+        </form>
     </div>
 </c:if>
 

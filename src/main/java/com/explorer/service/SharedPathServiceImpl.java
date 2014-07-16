@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -22,6 +23,9 @@ public class SharedPathServiceImpl implements SharedPathService{
 
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private FileSystemService fileSystem;
 
     @Override
     @Transactional
@@ -41,5 +45,11 @@ public class SharedPathServiceImpl implements SharedPathService{
         path.setTargetUser(dest);
         path.setPath(sharedPath);
         sharedPathDAO.savePath(path);
+    }
+
+    @Override
+    @Transactional
+    public void shareHomePath(String name, String targetUsername, String sharedPath) throws IOException, UserNotFoundException {
+        sharePath(name, targetUsername, fileSystem.buildHomePath(sharedPath, name).toString());
     }
 }

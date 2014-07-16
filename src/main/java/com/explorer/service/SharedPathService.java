@@ -3,6 +3,7 @@ package com.explorer.service;
 import com.explorer.domain.SharedPath;
 import com.explorer.service.exceptions.UserNotFoundException;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -11,4 +12,5 @@ import java.util.List;
 public interface SharedPathService {
     public List<SharedPath> getPathsByTargetUsername(String username);
     void sharePath(String sourceUsername, String targetUsername, String sharedPath) throws UserNotFoundException;
+    void shareHomePath(String name, String targetUsername, String sharedPath) throws IOException, UserNotFoundException;
 }
