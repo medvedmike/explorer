@@ -56,7 +56,7 @@ public class ServerController {
             mimeType = "application/octet-stream";
         }
         response.setContentType(mimeType);
-        response.setContentLengthLong(provider.getSize());
+        response.setContentLength((int)provider.getSize());
         response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", provider.getName()));
         provider.copy(response.getOutputStream());
     }
@@ -79,13 +79,17 @@ public class ServerController {
     public String shareFile(@RequestParam(value = "username", required = true) String targetUsername,
                             @RequestParam(value = "path", required = true) String sharedPath,
                             Principal principal, ModelMap model) {
-        try {
-            sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
-            model.put("message", "Shared successfully");
-            return "redirect:/server?path=" + sharedPath;
-        } catch (UserNotFoundException e) {
-            model.put("message", "Share error. User not found");
-            return "redirect:/server?path=" + sharedPath;
+        if (principal != null) {
+            try {
+                sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
+                model.put("message", "Shared successfully");
+                return "redirect:/server?path=" + sharedPath;
+            } catch (UserNotFoundException e) {
+                model.put("message", "Share error. User not found");
+                return "redirect:/server?path=" + sharedPath;
+            }
+        } else {
+            return "redirect:/index";
         }
     }
 

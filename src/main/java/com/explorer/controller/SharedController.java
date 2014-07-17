@@ -42,17 +42,25 @@ public class SharedController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String sharedList(ModelMap model, Principal principal) throws IOException {
-        model.put("url", "shared");
-        model.put("directory", fileSystem.getSharedDirectory("", principal.getName()));
-        return "files";
+        if (principal != null) {
+            model.put("url", "shared");
+            model.put("directory", fileSystem.getSharedDirectory("", principal.getName()));
+            return "files";
+        } else {
+            return "redirect:/index";
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"path"})
     public String sharedDir(@RequestParam(value = "path", required = true, defaultValue = "") String path,
                                           ModelMap model, Principal principal) throws IOException {
-        model.put("url", "shared");
-        model.put("directory", fileSystem.getSharedDirectory(path, principal.getName()));
-        return "files";
+        if (principal != null) {
+            model.put("url", "shared");
+            model.put("directory", fileSystem.getSharedDirectory(path, principal.getName()));
+            return "files";
+        } else {
+            return "redirect:/index";
+        }
     }
 
     @RequestMapping(value = "/file", method = RequestMethod.GET)
@@ -64,7 +72,7 @@ public class SharedController {
             mimeType = "application/octet-stream";
         }
         response.setContentType(mimeType);
-        response.setContentLengthLong(provider.getSize());
+        response.setContentLength((int)provider.getSize());
         response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", provider.getName()));
         provider.copy(response.getOutputStream());
     }
@@ -87,13 +95,17 @@ public class SharedController {
     public String shareFile(@RequestParam(value = "username", required = true) String targetUsername,
                             @RequestParam(value = "path", required = true) String sharedPath,
                             Principal principal, ModelMap model) throws IOException {
-        try {
-            sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
-            model.put("message", "Shared successfully");
-            return "redirect:/shared?path=" + sharedPath;
-        } catch (UserNotFoundException e) {
-            model.put("message", "Share error. User not found");
-            return "redirect:/shared?path=" + sharedPath;
+        if (principal != null) {
+            try {
+                sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
+                model.put("message", "Shared successfully");
+                return "redirect:/shared?path=" + sharedPath;
+            } catch (UserNotFoundException e) {
+                model.put("message", "Share error. User not found");
+                return "redirect:/shared?path=" + sharedPath;
+            }
+        } else {
+            return "redirect:/index";
         }
     }
 }
