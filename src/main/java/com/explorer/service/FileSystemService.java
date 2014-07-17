@@ -5,7 +5,7 @@ import com.explorer.domain.fs.AbsoluteDirectory;
 import com.explorer.domain.fs.Directory;
 import com.explorer.domain.fs.RelativeDirectory;
 import com.explorer.domain.fs.SharedDirectory;
-import com.explorer.service.exceptions.AccessDeniedException;
+import com.explorer.domain.fs.accesscontrol.exceptions.AccessDeniedException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,10 +36,8 @@ public class FileSystemService {
     }
 
     public Directory getDirectoryHome(String path, String username) throws IOException {
-        Path userdir = Paths.get(getWorkingDirectoryName().toString(), username);
+        Path userdir = Paths.get(getWorkingDirectoryName(), username);
         Path p = Paths.get(userdir.toString(), path).toRealPath();
-        if (!p.startsWith(userdir))
-            throw new AccessDeniedException();
         return new RelativeDirectory(p, userdir);
     }
 
@@ -58,27 +56,14 @@ public class FileSystemService {
         if (path.equals("")) {
             return new SharedDirectory(paths);
         } else {
-            final Path p = Paths.get(path).toRealPath(); //TODO lolwhat??
-            final Path[] current = new Path[1];
-            paths.forEach(new Consumer<SharedPath>() {
+            final Path p = Paths.get(path).toRealPath();
+            SharedPath current = paths.stream().findFirst().filter(new Predicate<SharedPath>() {
                 @Override
-                public void accept(SharedPath sharedPath) {
-                    if (p.startsWith(sharedPath.getPath())) {
-                        if (current[0] == null)
-                            current[0] = Paths.get(sharedPath.getPath());
-                        else {
-                            Path cur = Paths.get(sharedPath.getPath());
-                            if (current[0].compareTo(cur) < 0)
-                                current[0] = cur;
-                        }
-                    }
+                public boolean test(SharedPath sharedPath) {
+                    return p.startsWith(Paths.get(sharedPath.getPath()));
                 }
-            });
-            if (current[0] != null) {
-                return new SharedDirectory(current[0], path);
-            } else {
-                throw new AccessDeniedException();
-            }
+            }).get();
+            return new SharedDirectory(Paths.get(current.getPath()), path); //мы уверены что путь есть?
         }
     }
 //    private List<DirectoryInfo.BreadCrumb> getBreadcrumbs(Path path, String start) {
@@ -100,17 +85,14 @@ public class FileSystemService {
 //        return  breadcrumbs;
 //    }
 
-    public File getFile(String name) throws FileNotFoundException {
-        File file = new File(name);
-        if (!file.exists() || file.isDirectory())
-            throw new FileNotFoundException();
-        return file;
-    }
-
-    private Path getWorkingDirectoryName() {
+    public Path getWorkingDirectoryPath() {
         if (workingHome == null)
             workingHome = Paths.get(System.getProperty("user.home"), "explorer home"); //TODO configurable
         return workingHome;
+    }
+
+    public String getWorkingDirectoryName() {
+        return getWorkingDirectoryPath().toString();
     }
 
     public File getWorkingDirectory() {
