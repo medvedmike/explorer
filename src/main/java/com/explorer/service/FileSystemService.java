@@ -8,18 +8,15 @@ import com.explorer.domain.fs.SharedDirectory;
 import com.explorer.domain.fs.accesscontrol.exceptions.AccessDeniedException;
 import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**

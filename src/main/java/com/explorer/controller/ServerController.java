@@ -1,6 +1,5 @@
 package com.explorer.controller;
 
-import com.explorer.domain.SharedPath;
 import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
@@ -10,7 +9,6 @@ import com.explorer.service.SharedPathService;
 import com.explorer.service.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;

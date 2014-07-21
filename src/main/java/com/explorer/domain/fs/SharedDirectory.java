@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -36,6 +37,24 @@ public class SharedDirectory extends AbsoluteDirectory {
     public SharedDirectory(Path parentPath, String path) throws IOException {
         super(Paths.get(path));
         this.parentPath = parentPath;
+
+        String start = parentPath.getParent() != null ? parentPath.getFileName().toString() : parentPath.toString();
+
+        if (this.path != null) {
+            int max = this.path.getNameCount();
+            breadcrumbs = new ArrayList<>(max);
+            Path p = this.path;
+            String name;
+            do {
+                Path next = p.getParent();
+                String pth = p.toString();
+                name = next == null ? pth : p.getFileName().toString();
+                breadcrumbs.add(new Breadcrumb(name, pth));
+                p = next;
+            } while (p != null && !name.equals(start));
+            breadcrumbs.add(new Breadcrumb("shared", ""));
+            Collections.reverse(breadcrumbs);
+        }
     }
 
     @Override

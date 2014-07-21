@@ -17,7 +17,7 @@ public class RelativeFileInfo implements FileInfo {
     public RelativeFileInfo(Path path, String relationParent) {
         absolutePath = path;
         relation = relationParent;
-        this.path = Paths.get(relationParent, path.getFileName().toString());//TODO like this
+        this.path = Paths.get(relationParent, path.getFileName().toString());
     }
 
     @Override

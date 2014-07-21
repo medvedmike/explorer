@@ -21,16 +21,15 @@
         </div>
     </div>
 
-    <%--<c:if test="${!empty directory.breadcrumbs}">--%>
-    <div class="row">
-        <nav class="breadcrumbs columns large-12" id="breadcrumbs">
-            <%--<c:forEach items="${directory.breadcrumbs}" var="crumb">--%>
-                <%--<a href="<c:url value="/${url}"><c:param name="path" value="${crumb.path}"/></c:url>"><c:out value="${crumb.name}"/></a>--%>
-            <%--</c:forEach>--%>
-            <a class="current"><c:out value="${directory.name}"/></a>
-            <%--<c:if test="${directory.writable}"><a data-dropdown="add-dropdown">+</a></c:if>--%>
-        </nav>
-    </div>
+    <c:if test="${!empty directory.breadcrumbs}">
+        <div class="row">
+            <nav class="breadcrumbs columns large-12" id="breadcrumbs">
+                <c:forEach items="${directory.breadcrumbs}" var="crumb">
+                    <a href="<c:url value="/${url}"><c:param name="path" value="${crumb.path}"/></c:url>"><c:out value="${crumb.name}"/></a>
+                </c:forEach>
+            </nav>
+        </div>
+    </c:if>
 
     <div class="hor-separator-15"></div>
     <%--</c:if>--%>

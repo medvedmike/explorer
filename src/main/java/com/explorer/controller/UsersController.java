@@ -1,12 +1,8 @@
 package com.explorer.controller;
 
-import com.explorer.domain.Role;
 import com.explorer.domain.User;
-import com.explorer.service.FileSystemService;
-import com.explorer.service.RoleService;
 import com.explorer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -14,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Michael on 08.07.2014.

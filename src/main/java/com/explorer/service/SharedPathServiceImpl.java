@@ -52,4 +52,22 @@ public class SharedPathServiceImpl implements SharedPathService{
     public void shareHomePath(String name, String targetUsername, String sharedPath) throws IOException, UserNotFoundException {
         sharePath(name, targetUsername, fileSystem.buildHomePath(sharedPath, name).toString());
     }
+
+    @Override
+    @Transactional
+    public List<SharedPath> getPathsBySourceUsername(String username) {
+        return sharedPathDAO.getPathsBySourceUsername(username);
+    }
+
+    @Override
+    @Transactional
+    public void deletePath(Integer id) {
+        sharedPathDAO.deletePath(id);
+    }
+
+    @Override
+    @Transactional
+    public void deletePath(SharedPath path) {
+        sharedPathDAO.deletePath(path);
+    }
 }

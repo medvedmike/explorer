@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -18,6 +19,7 @@ public class RelativeDirectory implements Directory {
     private Path relate;
     private boolean root;
     private List<FileInfo> children;
+    protected List<Breadcrumb> breadcrumbs;
 
     public static int subIndex(Path path, Path relate) {
         Path name = relate.getFileName();
@@ -40,9 +42,27 @@ public class RelativeDirectory implements Directory {
             @Override
             public void accept(Path path) {
                 RelativeDirectory.this.children.add(new RelativeFileInfo(path, RelativeDirectory.this.path == null ?
-                        "" : RelativeDirectory.this.path.toString())); //TODO only concat names
+                        "" : RelativeDirectory.this.path.toString()));
             }
         });
+
+        String start = relate.getFileName().toString();
+
+        if (path != null) {
+            int max = path.getNameCount();
+            breadcrumbs = new ArrayList<>(max);
+            Path p = path;
+            String name;
+            do {
+                Path next = p.getParent();
+                String pth = p.toString();
+                name = next == null ? pth : p.getFileName().toString();
+                breadcrumbs.add(new Breadcrumb(name, pth));
+                p = next;
+            } while (p != null);
+            breadcrumbs.add(new Breadcrumb(relate.getFileName().toString(), ""));
+            Collections.reverse(breadcrumbs);
+        }
     }
 
     @Override
@@ -73,7 +93,9 @@ public class RelativeDirectory implements Directory {
 
     @Override
     public Breadcrumb[] getBreadcrumbs() {
-        return new Breadcrumb[0];
+        if (breadcrumbs == null) return null;
+        Breadcrumb[] res = new Breadcrumb[breadcrumbs.size()];
+        return breadcrumbs.toArray(res);
     }
 
     @Override

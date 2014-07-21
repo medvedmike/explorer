@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -18,6 +19,7 @@ public class AbsoluteDirectory implements Directory {
     protected Path path;
     protected boolean root;
     protected List<FileInfo> children;
+    protected List<Breadcrumb> breadcrumbs;
 
     protected AbsoluteDirectory() {}
 
@@ -33,6 +35,20 @@ public class AbsoluteDirectory implements Directory {
                     children.add(new AbsoluteFileInfo(path));
                 }
             });
+
+            int max = path.getNameCount();
+            breadcrumbs = new ArrayList<>(max);
+            Path p = path;
+            String name;
+            do {
+                Path next = p.getParent();
+                String pth = p.toString();
+                name = next == null ? pth : p.getFileName().toString();
+                breadcrumbs.add(new Breadcrumb(name, pth));
+                p = next;
+            } while (p != null);
+            Collections.reverse(breadcrumbs);
+
         } else {
             path = null;
             Stream<File> list = Arrays.stream(File.listRoots());
@@ -70,8 +86,10 @@ public class AbsoluteDirectory implements Directory {
     }
 
     @Override
-    public Breadcrumb[] getBreadcrumbs() { //TODO
-        return new Breadcrumb[0];
+    public Breadcrumb[] getBreadcrumbs() {
+        if (breadcrumbs == null) return null;
+        Breadcrumb[] res = new Breadcrumb[breadcrumbs.size()];
+        return breadcrumbs.toArray(res);
     }
 
     @Override

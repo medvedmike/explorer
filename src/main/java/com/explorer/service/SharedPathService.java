@@ -13,4 +13,8 @@ public interface SharedPathService {
     public List<SharedPath> getPathsByTargetUsername(String username);
     void sharePath(String sourceUsername, String targetUsername, String sharedPath) throws UserNotFoundException;
     void shareHomePath(String name, String targetUsername, String sharedPath) throws IOException, UserNotFoundException;
+    public List<SharedPath> getPathsBySourceUsername(String username);
+    public void deletePath(Integer id);
+    public void deletePath(SharedPath path);
+
 }

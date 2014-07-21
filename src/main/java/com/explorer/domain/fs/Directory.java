@@ -1,7 +1,5 @@
 package com.explorer.domain.fs;
 
-import java.util.List;
-
 /**
  * Created by Michael on 14.07.2014.
  */

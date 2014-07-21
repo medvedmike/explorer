@@ -18,6 +18,7 @@ public class SharedPathDAOImpl implements SharedPathDAO {
     private SessionFactory sessionFactory;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<SharedPath> getPathsByTargetUsername(String username) {
         Query query = sessionFactory.getCurrentSession().createQuery("from SharedPath where targetUser.id = " +
                 "(select id from User where username = :username)");
@@ -26,7 +27,27 @@ public class SharedPathDAOImpl implements SharedPathDAO {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public List<SharedPath> getPathsBySourceUsername(String username) {
+        Query query = sessionFactory.getCurrentSession().createQuery("from SharedPath where sourceUser.id = " +
+                "(select id from User where username = :username)");
+        query.setParameter("username", username);
+        return query.list();
+    }
+
+    @Override
     public void savePath(SharedPath path) {
         sessionFactory.getCurrentSession().save(path);
+    }
+
+    @Override
+    public void deletePath(Integer id) {
+        deletePath((SharedPath)sessionFactory.getCurrentSession().load(SharedPath.class, id));
+    }
+
+    @Override
+    public void deletePath(SharedPath path) {
+        if (path != null)
+            sessionFactory.getCurrentSession().delete(path);
     }
 }
