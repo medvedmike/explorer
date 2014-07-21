@@ -72,13 +72,24 @@ public class FileSystemService {
         }
     }
 
-    public void mkdirGlobal(String path, String name) throws IOException {
-        Path p = Paths.get(path, name);
-        if (Files.notExists(p.getParent()))
+    private void mkdir(Path path) throws IOException {
+        if (Files.notExists(path.getParent()))
             throw new DirectoryNotFoundException();
-        if (Files.exists(p))
+        if (Files.exists(path))
             throw new DirectoryAlreadyExistsException();
-        System.out.println(Files.createDirectory(p).toString());
+        System.out.println(Files.createDirectory(path).toString());
+    }
+
+    public void mkdirGlobal(String path, String name) throws IOException {
+        mkdir(Paths.get(path, name));
+    }
+
+    public void mkdirHome(String path, String name, String username) throws IOException {
+        mkdir(Paths.get(getWorkingDirectoryName(), username, path, name));
+    }
+
+    public void mkdirShared(String path, String name, String username) throws IOException {
+        mkdir(Paths.get(path, name));
     }
 //    private List<DirectoryInfo.BreadCrumb> getBreadcrumbs(Path path, String start) {
 //        int max = path.getNameCount();
@@ -110,7 +121,7 @@ public class FileSystemService {
     }
 
     public File getWorkingDirectory() {
-        File directory = new File(getWorkingDirectoryName().toString());
+        File directory = new File(getWorkingDirectoryName());
         if (!directory.exists()) {
             directory.mkdirs();
             directory.mkdir();
@@ -126,7 +137,7 @@ public class FileSystemService {
     }
 
     public Path buildHomePath(String path, String username) throws IOException {
-        Path userdir = Paths.get(getWorkingDirectoryName().toString(), username);
+        Path userdir = Paths.get(getWorkingDirectoryName(), username);
         Path p = Paths.get(userdir.toString(), path).toRealPath();
         if (!p.startsWith(userdir))
             throw new AccessDeniedException();

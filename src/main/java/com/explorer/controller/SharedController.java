@@ -103,4 +103,12 @@ public class SharedController {
             return "redirect:/index";
         }
     }
+
+    @RequestMapping(value = "/directory", method = RequestMethod.POST)
+    public String mkdir(@RequestParam(value = "name") String name,
+                        @RequestParam(value = "directory") String dir,
+                        Principal principal) throws IOException {
+        fileSystem.mkdirShared(dir, name, principal.getName());
+        return "redirect:/server?path=" + dir;
+    }
 }

@@ -44,6 +44,7 @@ public class AccessController {
 
 
     public void checkGlobalDir(String path) {
+        System.out.println("test global");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();
@@ -52,6 +53,7 @@ public class AccessController {
     }
 
     public void checkHomeDir(String path, String username) throws IOException {
+        System.out.println("test home");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();
@@ -63,6 +65,7 @@ public class AccessController {
     }
 
     public void checkSharedDir(final String path, String username) throws IOException {
+        System.out.println("test shared");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();

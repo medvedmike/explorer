@@ -98,4 +98,13 @@ public class HomeController {
         } else
             return "redirect:/index";
     }
+
+    @RequestMapping(value = "/directory", method = RequestMethod.POST)
+    public String mkdir(@RequestParam(value = "name") String name,
+                        @RequestParam(value = "directory") String dir,
+                        Principal principal) throws IOException {
+        String username = principal.getName();
+        fileSystem.mkdirHome(dir, name, username);
+        return "redirect:/home?path=" + dir;
+    }
 }

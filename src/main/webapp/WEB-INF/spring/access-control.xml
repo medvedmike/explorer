@@ -22,9 +22,17 @@
                         method="checkSharedDir"
                         arg-names="path, username"/>
 
-            <aop:before pointcut="execution(* com.explorer.service.FileSystemService.mkdirGlobal(String, String)) and args(path)"
+            <aop:before pointcut="execution(* com.explorer.service.FileSystemService.mkdirGlobal(String, String)) and args(path, *)"
                         method="checkGlobalDir"
                         arg-names="path"/>
+
+            <aop:before pointcut="execution(* com.explorer.service.FileSystemService.mkdirHome(String, String, String)) and args(path, *, username)"
+                        method="checkHomeDir"
+                        arg-names="path, username"/>
+
+            <aop:before pointcut="execution(* com.explorer.service.FileSystemService.mkdirShared(String, String, String)) and args(path, *, username)"
+                        method="checkSharedDir"
+                        arg-names="path, username"/>
 
         </aop:aspect>
     </aop:config>
