@@ -75,14 +75,9 @@ public class HomeController {
                              ModelMap model, final HttpServletRequest request,
                              Principal principal) throws IOException {
         if (principal != null) {
-            if (!file.isEmpty()) {
-                UploadFileProvider provider = new UploadAbsoluteFileProvider(fileSystem.buildHomePath(dir, principal.getName()).toString(), file.getOriginalFilename());
-                provider.write(file.getInputStream());
-                return "redirect:/home?path=" + dir;
-            } else {
-                model.put("message", ((MessageSource) context.getBean("messageSource")).getMessage("error.empty-file", new Object[0], request.getLocale()));
-                return "error";
-            }
+            UploadFileProvider provider = new UploadAbsoluteFileProvider(fileSystem.buildHomePath(dir, principal.getName()).toString(), file.getOriginalFilename());
+            provider.write(file.getInputStream());
+            return "redirect:/home?path=" + dir;
         } else
             return "redirect:/index";
     }

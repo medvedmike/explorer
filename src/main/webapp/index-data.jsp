@@ -21,9 +21,6 @@
                 </label>
                 <label for="password"><spring:message code="label.password"/>
                     <input type="password" name="j_password" id="password" placeholder="<spring:message code="label.password"/>" required/>
-                    <small class="error">
-                        <spring:message code="inputError.password.length"/>
-                    </small>
                 </label>
                 <input type="checkbox" name="_spring_security_remember_me" id="remember-me" value="Remember me">
                 <label for="remember-me">Remember me</label>

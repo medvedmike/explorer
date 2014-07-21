@@ -67,8 +67,8 @@ public class AccessController {
         if (auth == null)
             throw new UnauthorizedException();
 
-        List<SharedPath> paths = sharedPathService.getPathsByTargetUsername(username);
-        if (path != "") {
+        if (!path.equals("")) {
+            List<SharedPath> paths = sharedPathService.getPathsByTargetUsername(username);
             final Path p = Paths.get(path).toRealPath();
             if (!paths.stream().anyMatch(new Predicate<SharedPath>() {
                 @Override

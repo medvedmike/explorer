@@ -22,6 +22,10 @@
                         method="checkSharedDir"
                         arg-names="path, username"/>
 
+            <aop:before pointcut="execution(* com.explorer.service.FileSystemService.mkdirGlobal(String, String)) and args(path)"
+                        method="checkGlobalDir"
+                        arg-names="path"/>
+
         </aop:aspect>
     </aop:config>
 </beans>

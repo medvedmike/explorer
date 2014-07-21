@@ -6,7 +6,9 @@ import com.explorer.domain.fs.Directory;
 import com.explorer.domain.fs.RelativeDirectory;
 import com.explorer.domain.fs.SharedDirectory;
 import com.explorer.domain.fs.accesscontrol.exceptions.AccessDeniedException;
+import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,14 +59,26 @@ public class FileSystemService {
             return new SharedDirectory(paths);
         } else {
             final Path p = Paths.get(path).toRealPath();
-            SharedPath current = paths.stream().findFirst().filter(new Predicate<SharedPath>() {
+//            final StringBuilder sb = new StringBuilder(p.toString()).append("\n");
+            SharedPath current = paths.stream().filter(new Predicate<SharedPath>() {
                 @Override
                 public boolean test(SharedPath sharedPath) {
-                    return p.startsWith(Paths.get(sharedPath.getPath()));
+//                    sb.append("test: ").append(sharedPath.getPath()).append(" res: ").append(p.startsWith(sharedPath.getPath()));
+                    return p.startsWith(sharedPath.getPath());
                 }
-            }).get();
+            }).findFirst().get();
+//            throw new RuntimeException(sb.toString());
             return new SharedDirectory(Paths.get(current.getPath()), path); //мы уверены что путь есть?
         }
+    }
+
+    public void mkdirGlobal(String path, String name) throws IOException {
+        Path p = Paths.get(path, name);
+        if (Files.notExists(p.getParent()))
+            throw new DirectoryNotFoundException();
+        if (Files.exists(p))
+            throw new DirectoryAlreadyExistsException();
+        System.out.println(Files.createDirectory(p).toString());
     }
 //    private List<DirectoryInfo.BreadCrumb> getBreadcrumbs(Path path, String start) {
 //        int max = path.getNameCount();

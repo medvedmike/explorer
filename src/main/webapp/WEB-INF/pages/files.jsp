@@ -18,7 +18,6 @@
                 <a class="button dropdown tiny right" data-dropdown="mkdir-dropdown">Create directory</a>
             </c:if>
             <a href="#" class="button dropdown tiny right" data-dropdown="share-dropdown">Share</a>
-            <a href="#" class="button dropdown tiny right" data-dropdown="share-dropdown">Download zip</a>
         </div>
     </div>
 
@@ -45,8 +44,9 @@
     </div>
 
     <div class="f-dropdown content" data-dropdown-content id="mkdir-dropdown">
-        <form data-abide>
-            <input type="text" required placeholder="folder name">
+        <form data-abide action="<c:url value="${url}/directory"/>" method="post">
+            <input style="display: none;" type="text" name="directory" value="${directory.path}">
+            <input type="text" name="name" required placeholder="folder name">
             <small class="error">Folder name required.</small>
             <input class="button" type="submit" value="Create">
         </form>

@@ -81,14 +81,9 @@ public class SharedController {
     public String uploadFile(@RequestParam(value = "file") MultipartFile file,
                              @RequestParam(value = "directory") String dir,
                              ModelMap model, final HttpServletRequest request) throws IOException {
-        if (!file.isEmpty()) {
-            UploadFileProvider provider = new UploadAbsoluteFileProvider(dir, file.getOriginalFilename());
-            provider.write(file.getInputStream());
-            return "redirect:/shared?path=" + dir;
-        } else {
-            model.put("message", ((MessageSource)context.getBean("messageSource")).getMessage("error.empty-file", new Object[0], request.getLocale()));
-            return "error";
-        }
+        UploadFileProvider provider = new UploadAbsoluteFileProvider(dir, file.getOriginalFilename());
+        provider.write(file.getInputStream());
+        return "redirect:/shared?path=" + dir;
     }
 
     @RequestMapping(value = "/share", method = RequestMethod.POST, params = {"username", "path"})

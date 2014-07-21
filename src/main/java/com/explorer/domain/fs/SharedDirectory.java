@@ -1,6 +1,7 @@
 package com.explorer.domain.fs;
 
 import com.explorer.domain.SharedPath;
+import com.explorer.domain.fs.dataprovider.exceptions.InternalServerErrorException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,11 +24,11 @@ public class SharedDirectory extends AbsoluteDirectory {
         sharedPaths.forEach(new Consumer<SharedPath>() {
             @Override
             public void accept(SharedPath sharedPath) {
-                try {
-                    children.add(new AbsoluteFileInfo(Paths.get(sharedPath.getPath()).toRealPath()));
-                } catch (IOException e) {
-                    e.printStackTrace();//TODO придумать что-нибудь
-                }
+            try {
+                children.add(new AbsoluteFileInfo(Paths.get(sharedPath.getPath()).toRealPath()));
+            } catch (IOException e) {
+                throw new InternalServerErrorException(e.getMessage());
+            }
             }
         });
     }
