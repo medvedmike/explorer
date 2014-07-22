@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 /**
  * Created by Michael on 14.07.2014.
+ * Информация о файле полученном по относительному пути
  */
 public class RelativeFileInfo implements FileInfo {
 

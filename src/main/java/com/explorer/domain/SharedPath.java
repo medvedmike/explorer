@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 /**
  * Created by Michael on 15.07.2014.
+ * Информация о расшаренном пути
  */
 @Entity
 @Table(name = "shared_paths")

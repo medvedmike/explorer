@@ -21,6 +21,7 @@ import java.util.function.Predicate;
 
 /**
  * Created by Michael on 04.07.2014.
+ * Сервис отвечающий за взаимодействие с файловой системой
  */
 @Service
 public class FileSystemService {
@@ -56,16 +57,13 @@ public class FileSystemService {
             return new SharedDirectory(paths);
         } else {
             final Path p = Paths.get(path).toRealPath();
-//            final StringBuilder sb = new StringBuilder(p.toString()).append("\n");
             SharedPath current = paths.stream().filter(new Predicate<SharedPath>() {
                 @Override
                 public boolean test(SharedPath sharedPath) {
-//                    sb.append("test: ").append(sharedPath.getPath()).append(" res: ").append(p.startsWith(sharedPath.getPath()));
                     return p.startsWith(sharedPath.getPath());
                 }
             }).findFirst().get();
-//            throw new RuntimeException(sb.toString());
-            return new SharedDirectory(Paths.get(current.getPath()), path); //мы уверены что путь есть?
+            return new SharedDirectory(Paths.get(current.getPath()), path);
         }
     }
 
@@ -74,7 +72,7 @@ public class FileSystemService {
             throw new DirectoryNotFoundException();
         if (Files.exists(path))
             throw new DirectoryAlreadyExistsException();
-        Files.createDirectory(path).toString();
+        Files.createDirectory(path);
     }
 
     public void mkdirGlobal(String path, String name) throws IOException {
@@ -88,24 +86,6 @@ public class FileSystemService {
     public void mkdirShared(String path, String name, String username) throws IOException {
         mkdir(Paths.get(path, name));
     }
-//    private List<DirectoryInfo.BreadCrumb> getBreadcrumbs(Path path, String start) {
-//        int max = path.getNameCount();
-//        List<DirectoryInfo.BreadCrumb> breadcrumbs = new ArrayList<>(max);
-//
-//        System.out.println(path.subpath(2, path.getNameCount() - 1));
-//
-//        Path p = path;
-//        String name;
-//        do {
-//            Path next = p.getParent();
-//            String pth = p.toString();
-//            name = next == null ? pth : p.getFileName().toString();
-//            breadcrumbs.add(new DirectoryInfo.BreadCrumb(name, pth));
-//            p = next;
-//        } while (p != null && !name.equals(start));
-//        Collections.reverse(breadcrumbs);
-//        return  breadcrumbs;
-//    }
 
     public Path getWorkingDirectoryPath() {
         if (workingHome == null)

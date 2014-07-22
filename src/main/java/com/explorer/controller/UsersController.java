@@ -23,26 +23,42 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
+    /**
+     * отдает страничку для регистрации
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signUp(ModelMap model) {
         model.addAttribute(new User());
         return "../../register";
     }
 
+    /**
+     * отдает страничку для входа в систему
+     * @return
+     */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "index";
     }
 
+    /**
+     * Регистрация пользователя
+     * @param newUser
+     * @param bindingResult
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String register(@Valid User newUser, BindingResult bindingResult, ModelMap model) {
         List<ObjectError> errors = new ArrayList<>();
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) { //проверка на ошибки в заполнении полей
             errors.addAll(bindingResult.getFieldErrors());
             return "../../register";
         }
         User user = userService.getUser(newUser.getUsername());
-        if (user != null) {
+        if (user != null) { //проверка на существование данного логина в системе
             errors.add(new ObjectError("user", "inputError.loginExists"));
             return "../../register";
         }

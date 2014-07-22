@@ -5,8 +5,13 @@ import java.io.InputStream;
 
 /**
  * Created by Michael on 15.07.2014.
+ * Интерфейс, аозволяющий сохранять файлы в файловой системе
  */
 public interface UploadFileProvider {
-    InputStream getInputStream() throws IOException;
+    /**
+     * Сохранение файла из полученного потока для чтения
+     * @param stream
+     * @throws IOException
+     */
     void write(InputStream stream) throws IOException;
 }

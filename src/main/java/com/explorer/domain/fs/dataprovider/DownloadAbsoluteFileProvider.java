@@ -17,13 +17,8 @@ public class DownloadAbsoluteFileProvider implements DownloadFileProvider {
 
     public DownloadAbsoluteFileProvider(String fileName) throws IOException {
         path = Paths.get(fileName).toRealPath();
-        if (!Files.exists(path) || Files.isDirectory(path))
+        if (!Files.exists(path) || Files.isDirectory(path)) //проверка на то что файл существует и действительно является файлом
             throw new FileNotFoundOnServerException();
-    }
-
-    @Override
-    public OutputStream getOutputStream() throws IOException {
-        return Files.newOutputStream(path);
     }
 
     @Override

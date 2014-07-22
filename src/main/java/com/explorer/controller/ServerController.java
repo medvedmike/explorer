@@ -29,6 +29,7 @@ import java.util.List;
 
 /**
  * Created by Michael on 01.07.2014.
+ * Управление файлами на всем сервере (для администратора)
  */
 @Controller
 @RequestMapping("/server")
@@ -43,6 +44,13 @@ public class ServerController {
     @Autowired
     private SharedPathService sharedPathService;
 
+    /**
+     * Просмотр файлов на всем сервере (для администратора)
+     * @param path абсолютный путь
+     * @param model
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(method = RequestMethod.GET)
     public String viewFiles(@RequestParam(value = "path", required = false, defaultValue = "") String path,
                             ModelMap model) throws IOException {
@@ -51,6 +59,13 @@ public class ServerController {
         return "files";
     }
 
+    /**
+     * Загрузка файла
+     * @param name
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @RequestMapping(value = "/file", method = RequestMethod.GET)
     public void downloadFile(@RequestParam(value = "name", required = true) String name,
                              final HttpServletRequest request, final HttpServletResponse response) throws IOException {
@@ -65,6 +80,15 @@ public class ServerController {
         provider.copy(response.getOutputStream());
     }
 
+    /**
+     * Отправка файла на сервер
+     * @param file
+     * @param dir
+     * @param model
+     * @param request
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam(value = "file") MultipartFile file,
                              @RequestParam(value = "directory") String dir,
@@ -82,6 +106,14 @@ public class ServerController {
         return "redirect:/server?path=" + dir + mes;
     }
 
+    /**
+     * создание папки
+     * @param name
+     * @param dir
+     * @param model
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/directory", method = RequestMethod.POST)
     public String mkdir(@RequestParam(value = "name") String name,
                         @RequestParam(value = "directory") String dir,
@@ -98,6 +130,14 @@ public class ServerController {
         return "redirect:/server?path=" + dir + mes;
     }
 
+    /**
+     * Расшаривание файла
+     * @param targetUsername
+     * @param sharedPath
+     * @param principal
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/share", method = RequestMethod.POST, params = {"username", "path"})
     public String shareFile(@RequestParam(value = "username", required = true) String targetUsername,
                             @RequestParam(value = "path", required = true) String sharedPath,
