@@ -18,16 +18,11 @@ public class UploadAbsoluteFileProvider implements UploadFileProvider {
 
     public UploadAbsoluteFileProvider(String directory, String fileName) throws IOException {
         path = Paths.get(directory).toRealPath();
-        if (!Files.exists(path.getParent()) || !Files.isDirectory(path.getParent()))
+        if (!Files.exists(path.getParent()) || !Files.isDirectory(path.getParent())) //проверка существования
             throw new DirectoryNotFoundException();
         path = Paths.get(path.toString(), fileName);
-        if (Files.exists(path))
+        if (Files.exists(path)) //загружаем только если файла с таким мменем не существует
             throw new FileAlreadyExistsException(path.toString());
-    }
-
-    @Override
-    public InputStream getInputStream() throws IOException {
-        return Files.newInputStream(path);
     }
 
     @Override

@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 /**
  * Created by Michael on 14.07.2014.
+ * Информация о относительной дирректории(относительно папки пользователя)
  */
 public class RelativeDirectory implements Directory {
 

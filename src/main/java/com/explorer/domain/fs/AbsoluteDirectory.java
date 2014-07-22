@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 /**
  * Created by Michael on 14.07.2014.
+ * Информация о дирректории, полученная на основе абсолютных путей в ФС.
  */
 public class AbsoluteDirectory implements Directory {
 

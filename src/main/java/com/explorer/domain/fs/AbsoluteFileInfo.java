@@ -6,6 +6,7 @@ import java.nio.file.Path;
 
 /**
  * Created by Michael on 14.07.2014.
+ * Информация о файле с абсолютными путями
  */
 public class AbsoluteFileInfo implements FileInfo {
 

@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 /**
  * Created by Michael on 09.07.2014.
+ * Роль пользователя
  */
 @Entity
 @Table(name = "roles")

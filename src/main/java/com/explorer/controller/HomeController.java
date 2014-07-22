@@ -27,6 +27,7 @@ import java.security.Principal;
 
 /**
  * Created by Michael on 11.07.2014.
+ * Управление файлами в домашних каталогах пользователей
  */
 @Controller
 @RequestMapping(value = "/home")
@@ -41,6 +42,15 @@ public class HomeController {
     @Autowired
     private SharedPathService sharedPathService;
 
+
+    /**
+     * Отображение файлов из домашней дирректории пользователя
+     * @param path относительный путь к файлу
+     * @param model
+     * @param principal
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(method = RequestMethod.GET)
     public String showDirectory(@RequestParam(value = "path", defaultValue = "") String path,
                               ModelMap model, Principal principal) throws IOException {
@@ -52,6 +62,14 @@ public class HomeController {
             return "redirect:/index";
     }
 
+    /**
+     * Загрузка файла
+     * @param name имя файла
+     * @param request
+     * @param response
+     * @param principal
+     * @throws IOException
+     */
     @RequestMapping(value = "/file", method = RequestMethod.GET)
     public void downloadFile(@RequestParam(value = "name", required = true) String name,
                              final HttpServletRequest request, final HttpServletResponse response,
@@ -70,6 +88,16 @@ public class HomeController {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
     }
 
+    /**
+     * Отправка файла на сервер
+     * @param file файл
+     * @param dir относительный путь к папке назначения
+     * @param model
+     * @param request
+     * @param principal
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam(value = "file") MultipartFile file,
                              @RequestParam(value = "directory") String dir,
@@ -91,6 +119,15 @@ public class HomeController {
             return "redirect:/index";
     }
 
+    /**
+     * Расшаривание дирректории
+     * @param targetUsername имя целевого пользователя
+     * @param sharedPath путь к папке
+     * @param principal
+     * @param model
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/share", method = RequestMethod.POST, params = {"username", "path"})
     public String shareFile(@RequestParam(value = "username", required = true) String targetUsername,
                             @RequestParam(value = "path", required = true) String sharedPath,
@@ -108,6 +145,14 @@ public class HomeController {
             return "redirect:/index";
     }
 
+    /**
+     * Создание папки
+     * @param name имя новой папки
+     * @param dir целевая папка
+     * @param principal
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/directory", method = RequestMethod.POST)
     public String mkdir(@RequestParam(value = "name") String name,
                         @RequestParam(value = "directory") String dir,

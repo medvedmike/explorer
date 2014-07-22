@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 
 /**
  * Created by Michael on 16.07.2014.
+ * Информация о расшаренной папке
  */
 public class SharedDirectory extends AbsoluteDirectory {
 
