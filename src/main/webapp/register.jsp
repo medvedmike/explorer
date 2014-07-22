@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="row">
-    <div style="margin-top: 20px;" class="content panel columns large-centered large-8" id="content">
+    <div style="margin-top: 20px;" class="columns large-centered large-8" id="content">
         <div class="row collapse">
             <c:if test="${!empty errorCode}">
                 <div data-alert class="alert-box alert"><spring:message code="${errorCode}"/></div>
@@ -30,7 +30,7 @@
             <form data-abide method="post" name="user" action="<c:url value="/signup"/>">
             <fieldset class="">
                 <legend><spring:message code="label.registerLegend"/></legend>
-                <label for="username"><spring:message code="label.login"/> <small>required</small>
+                <label for="username"><spring:message code="label.login"/> <small><spring:message code="label.required"/></small>
                     <input type="text" name="username" id="username" placeholder="<spring:message code="label.login"/>" required pattern="[a-zA-Z]+"
                     <c:if test="${!empty user}">value="${user.username}"</c:if>/>
                     <small class="error">
@@ -38,11 +38,15 @@
                         <spring:message code="inputError.login.letters"/>
                     </small>
                 </label>
-                <label for="password"><spring:message code="label.password"/> <small>required</small>
+                <label for="password"><spring:message code="label.password"/> <small><spring:message code="label.required"/></small>
                     <input type="password" name="password" id="password" placeholder="<spring:message code="label.password"/>" required/>
                     <small class="error">
                         <spring:message code="inputError.password.length"/>
                     </small>
+                </label>
+                <label for="confirmPassword"><spring:message code="label.password.confirm"/> <small><spring:message code="label.required"/></small>
+                    <input type="password" id="confirmPassword" placeholder="<spring:message code="label.password.confirm"/>" name="confirmPassword" required data-equalto="password">
+                    <small class="error"><spring:message code="inputError.password.match"/></small>
                 </label>
                 <button type="submit"><spring:message code="label.signUp"/></button>
             </fieldset>

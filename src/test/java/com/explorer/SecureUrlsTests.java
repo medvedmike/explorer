@@ -1,5 +1,7 @@
 package com.explorer;
 
+import com.explorer.service.FileSystemService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.File;
 import java.nio.file.NoSuchFileException;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -41,9 +44,22 @@ public class SecureUrlsTests {
     @Autowired
     private FilterChainProxy springSecurityFilter;
 
+    @Autowired
+    private FileSystemService fileSystemService;
+
+    private File user, admin;
+
     @Before
     public void setup() {
         this.mockMvc = webAppContextSetup(this.wac).addFilter(springSecurityFilter).build();
+        admin = fileSystemService.createUserDirectory("testadmin");
+        user = fileSystemService.createUserDirectory("testuser");
+    }
+
+    @After
+    public void after() {
+        user.deleteOnExit();
+        admin.deleteOnExit();
     }
 
     /**
@@ -67,7 +83,7 @@ public class SecureUrlsTests {
      */
     @Test
     public void testUser() throws Exception {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("user", "password");
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testuser", "password");
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
 
@@ -87,7 +103,7 @@ public class SecureUrlsTests {
      */
     @Test
     public void testAdmin() throws Exception {
-        Authentication authentication = new UsernamePasswordAuthenticationToken("admin", "adminpass");
+        Authentication authentication = new UsernamePasswordAuthenticationToken("testadmin", "adminpass");
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
 

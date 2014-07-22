@@ -1,5 +1,6 @@
 package com.explorer.controller;
 
+import com.explorer.domain.fs.accesscontrol.exceptions.UnauthorizedException;
 import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -107,5 +109,20 @@ public class SharedController {
                         Principal principal) throws IOException {
         fileSystem.mkdirShared(dir, name, principal.getName());
         return "redirect:/shared?path=" + dir;
+    }
+
+    @RequestMapping(value = "/my", method = RequestMethod.GET)
+    public String controlShared(Principal principal, ModelMap model) {
+        if (principal == null) throw new UnauthorizedException();
+        model.put("paths", sharedPathService.getPathsBySourceUsername(principal.getName()));
+        return "my-shared";
+    }
+
+    @RequestMapping(value = "/my/{id}", method = RequestMethod.GET, params = {"del"})
+    public String controlShared(@PathVariable("id") Integer id,
+                                Principal principal, ModelMap model) {
+        sharedPathService.deletePath(id);
+        model.put("paths", sharedPathService.getPathsBySourceUsername(principal.getName()));
+        return "my-shared";
     }
 }

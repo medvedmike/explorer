@@ -12,16 +12,17 @@
             <li class="name">
                 <h1><a href="<c:url value="/home"/>"><spring:message code="label.serviceName"/></a></h1>
             </li>
-            <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+            <li class="toggle-topbar menu-icon"><a href="#"><span><spring:message code="label.menu"/></span></a></li>
         </ul>
 
         <section class="top-bar-section">
             <ul class="left">
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
-                    <li><a href="<c:url value="/server"/>">Server</a></li>
+                    <li><a href="<c:url value="/server"/>"><spring:message code="label.serverMode"/></a></li>
                 </sec:authorize>
                 <sec:authorize access="hasRole('ROLE_USER')">
-                    <li><a href="<c:url value="/shared"/>">Shared</a></li>
+                    <li><a href="<c:url value="/shared"/>"><spring:message code="label.sharedForMe"/></a></li>
+                    <li><a href="<c:url value="/shared/my"/>"><spring:message code="label.myShared"/></a></li>
                 </sec:authorize>
             </ul>
 
@@ -31,9 +32,9 @@
                 </sec:authorize>
                 <sec:authorize access="isAuthenticated()">
                     <li class="has-dropdown">
-                        <a href="#">Settings</a>
+                        <a href="#"><spring:message code="label.settings"/></a>
                         <ul class="dropdown">
-                            <li><a href="<c:url value="/logout"/>">Sign out</a></li>
+                            <li><a href="<c:url value="/logout"/>"><spring:message code="label.signOut"/></a></li>
                         </ul>
                     </li>
                 </sec:authorize>

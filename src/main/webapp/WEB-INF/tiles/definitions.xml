@@ -16,6 +16,10 @@
     <definition name="index" extends="template">
         <put-attribute name="content" value="/index-data.jsp"/>
     </definition>
+
+    <definition name="my-shared" extends="template">
+        <put-attribute name="content" value="/WEB-INF/pages/shared.jsp"/>
+    </definition>
     <!--<definition name="register" extends="template">-->
         <!--<put-attribute name="content" value="/WEB-INF/pages/register.jsp"/>-->
     <!--</definition>-->

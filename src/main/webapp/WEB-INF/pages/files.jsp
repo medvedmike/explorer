@@ -14,10 +14,10 @@
         </div>
         <div class="columns large-8 clearfix">
             <c:if test="${directory.writable}">
-                <a class="button dropdown tiny right" data-dropdown="upload-dropdown">Upload file</a>
-                <a class="button dropdown tiny right" data-dropdown="mkdir-dropdown">Create directory</a>
+                <a class="button dropdown tiny right" data-dropdown="upload-dropdown"><spring:message code="label.upload"/></a>
+                <a class="button dropdown tiny right" data-dropdown="mkdir-dropdown"><spring:message code="label.mkdir"/></a>
             </c:if>
-            <a href="#" class="button dropdown tiny right" data-dropdown="share-dropdown">Share</a>
+            <a href="#" class="button dropdown tiny right" data-dropdown="share-dropdown"><spring:message code="label.share"/></a>
         </div>
     </div>
 
@@ -32,7 +32,6 @@
     </c:if>
 
     <div class="hor-separator-15"></div>
-    <%--</c:if>--%>
 
     <div class="f-dropdown content" data-dropdown-content id="share-dropdown">
         <form method="post" action="<c:url value="${url}/share"/> ">
@@ -46,7 +45,7 @@
         <form data-abide action="<c:url value="${url}/directory"/>" method="post">
             <input style="display: none;" type="text" name="directory" value="${directory.path}">
             <input type="text" name="name" required placeholder="folder name">
-            <small class="error">Folder name required.</small>
+            <small class="error"><spring:message code="inputError.folderName"/></small>
             <input class="button" type="submit" value="Create">
         </form>
     </div>
@@ -55,7 +54,7 @@
         <form data-abide action="<c:url value="${url}/file"/>" method="post" enctype="multipart/form-data">
             <input style="display: none;" type="text" name="directory" value="${directory.path}">
             <input type="file" name="file" required>
-            <small class="error">You must select a file.</small>
+            <small class="error"><spring:message code="inputError.selectFile"/></small>
             <input class="button" type="submit" value="Upload">
         </form>
     </div>
@@ -76,8 +75,7 @@
             <c:when test="${!element.file}">
                 <div class="element directory row collapse">
                     <a class="large-10 columns open" href="<c:url value="/${url}"><c:param name="path" value="${element.path}"/></c:url>">
-                        <%--<c:out value="${directory.root? element.path : element.name}"/>--%>
-                            <c:out value="${element.name}"/>
+                        <c:out value="${element.name}"/>
                     </a>
                 </div>
             </c:when>
@@ -85,7 +83,6 @@
                 <c:if test="${!directory.root}">
                     <div class="element file row collapse">
                         <a class="large-10 columns" href="<c:url value="${url}/file"><c:param name="name" value="${element.path}"/></c:url>">
-                            <%--<c:out value="${directory.root ? element.path : element.name}"/>--%>
                             <c:out value="${element.name}"/>
                         </a>
                         <span class="large-2 columns right-align size">

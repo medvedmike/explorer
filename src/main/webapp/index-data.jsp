@@ -10,10 +10,10 @@
         <div class="columns large-3">
             <form data-abide method="post" action="<c:url value="/j_spring_security_check"/>">
             <fieldset class="">
-                <legend>Sign in</legend>
+                <legend><spring:message code="label.signIn"/></legend>
                 <c:if test="${!empty param.error}">
                     <div class="alert-box alert">
-                        Login or password are incorrect
+                        <spring:message code="inputError.signIn"/>
                     </div>
                 </c:if>
                 <label for="username"><spring:message code="label.login"/>
@@ -23,7 +23,7 @@
                     <input type="password" name="j_password" id="password" placeholder="<spring:message code="label.password"/>" required/>
                 </label>
                 <input type="checkbox" name="_spring_security_remember_me" id="remember-me" value="Remember me">
-                <label for="remember-me">Remember me</label>
+                <label for="remember-me"><spring:message code="label.rememberMe"/></label>
                 <button type="submit"><spring:message code="label.signIn"/></button>
             </fieldset>
             </form>
