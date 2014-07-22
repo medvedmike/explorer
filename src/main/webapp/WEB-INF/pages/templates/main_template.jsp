@@ -26,6 +26,7 @@
     </div>
     <script type="text/javascript" src="<c:url value="/resources/js/jquery-1.11.1.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/resources/js/foundation.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/resources/js/vendor/modernizr.js"/>"></script>
     <script type="text/javascript">
         $(document).foundation();
     </script>
