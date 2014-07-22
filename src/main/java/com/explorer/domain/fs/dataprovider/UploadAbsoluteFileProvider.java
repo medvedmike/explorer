@@ -4,6 +4,7 @@ import com.explorer.service.exceptions.DirectoryNotFoundException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,8 @@ public class UploadAbsoluteFileProvider implements UploadFileProvider {
         if (!Files.exists(path.getParent()) || !Files.isDirectory(path.getParent()))
             throw new DirectoryNotFoundException();
         path = Paths.get(path.toString(), fileName);
+        if (Files.exists(path))
+            throw new FileAlreadyExistsException(path.toString());
     }
 
     @Override

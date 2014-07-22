@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Michael on 08.07.2014.
@@ -33,15 +36,17 @@ public class UsersController {
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String register(@Valid User newUser, BindingResult bindingResult, ModelMap model) {
+        List<ObjectError> errors = new ArrayList<>();
         if (bindingResult.hasErrors()) {
-            model.put("errors", bindingResult.getAllErrors());
+            errors.addAll(bindingResult.getFieldErrors());
             return "../../register";
         }
         User user = userService.getUser(newUser.getUsername());
         if (user != null) {
-            model.put("errorCode", "inputError.loginExists");
+            errors.add(new ObjectError("user", "inputError.loginExists"));
             return "../../register";
         }
+        model.put("errors", errors);
         userService.saveUser(newUser);
         return "redirect:/home";
     }

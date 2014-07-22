@@ -7,6 +7,8 @@ import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.SharedPathService;
+import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
+import com.explorer.service.exceptions.DirectoryNotFoundException;
 import com.explorer.service.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
 
 /**
@@ -80,9 +83,17 @@ public class SharedController {
     public String uploadFile(@RequestParam(value = "file") MultipartFile file,
                              @RequestParam(value = "directory") String dir,
                              ModelMap model, final HttpServletRequest request) throws IOException {
-        UploadFileProvider provider = new UploadAbsoluteFileProvider(dir, file.getOriginalFilename());
-        provider.write(file.getInputStream());
-        return "redirect:/shared?path=" + dir;
+        String mes;
+        try {
+            UploadFileProvider provider = new UploadAbsoluteFileProvider(dir, file.getOriginalFilename());
+            provider.write(file.getInputStream());
+            mes="&message=message.fileUploaded";
+        } catch (DirectoryNotFoundException ex) {
+            mes = "&error=error.directoryNotFound";
+        } catch (FileAlreadyExistsException ex) {
+            mes = "&error=error.fileExists";
+        }
+        return "redirect:/shared?path=" + dir + mes;
     }
 
     @RequestMapping(value = "/share", method = RequestMethod.POST, params = {"username", "path"})
@@ -90,14 +101,14 @@ public class SharedController {
                             @RequestParam(value = "path", required = true) String sharedPath,
                             Principal principal, ModelMap model) throws IOException {
         if (principal != null) {
+            String mes;
             try {
                 sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
-                model.put("message", "Shared successfully");
-                return "redirect:/shared?path=" + sharedPath;
+                mes="&message=message.shared";
             } catch (UserNotFoundException e) {
-                model.put("message", "Share error. User not found");
-                return "redirect:/shared?path=" + sharedPath;
+                mes = "&error=error.shareError";
             }
+            return "redirect:/shared?path=" + sharedPath + mes;
         } else {
             return "redirect:/index";
         }
@@ -107,8 +118,16 @@ public class SharedController {
     public String mkdir(@RequestParam(value = "name") String name,
                         @RequestParam(value = "directory") String dir,
                         Principal principal) throws IOException {
-        fileSystem.mkdirShared(dir, name, principal.getName());
-        return "redirect:/shared?path=" + dir;
+        String mes;
+        try {
+            fileSystem.mkdirShared(dir, name, principal.getName());
+            mes="&message=message.directoryCreated";
+        } catch (DirectoryAlreadyExistsException ex) {
+            mes = "&error=error.directoryExists";
+        } catch (DirectoryNotFoundException ex) {
+            mes = "&error=error.directoryNotFound";
+        }
+        return "redirect:/shared?path=" + dir + mes;
     }
 
     @RequestMapping(value = "/my", method = RequestMethod.GET)

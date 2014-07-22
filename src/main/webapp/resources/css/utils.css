@@ -15,3 +15,10 @@
     height: 0;
     margin-top: 20px;
 }
+
+.errors {
+    position: absolute;
+    z-index: 50;
+    margin: 0 25px 25px;
+    right: 0;
+}

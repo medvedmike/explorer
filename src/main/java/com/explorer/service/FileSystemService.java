@@ -74,7 +74,7 @@ public class FileSystemService {
             throw new DirectoryNotFoundException();
         if (Files.exists(path))
             throw new DirectoryAlreadyExistsException();
-        System.out.println(Files.createDirectory(path).toString());
+        Files.createDirectory(path).toString();
     }
 
     public void mkdirGlobal(String path, String name) throws IOException {

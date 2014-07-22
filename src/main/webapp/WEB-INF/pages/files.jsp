@@ -6,6 +6,19 @@
 
 <link rel="stylesheet" href="<c:url value="/resources/css/files.css"/>">
 
+<div class="errors">
+    <c:if test="${!empty param.message}">
+        <div data-alert class="alert-box small"><spring:message code="${param.message}"/>
+            <a href="#" class="close">&times;</a>
+        </div>
+    </c:if>
+    <c:if test="${!empty param.error}">
+        <div data-alert class="alert-box small alert"><spring:message code="${param.error}"/>
+            <a href="#" class="close">&times;</a>
+        </div>
+    </c:if>
+</div>
+
 <c:if test="${!directory.root}">
 
     <div class="control-panel row">

@@ -6,6 +6,8 @@ import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.SharedPathService;
+import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
+import com.explorer.service.exceptions.DirectoryNotFoundException;
 import com.explorer.service.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
 
 /**
@@ -60,7 +63,7 @@ public class HomeController {
                 mimeType = "application/octet-stream";
             }
             response.setContentType(mimeType);
-            response.setContentLength((int)provider.getSize());
+            response.setContentLength((int) provider.getSize());
             response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", provider.getName()));
             provider.copy(response.getOutputStream());
         } else
@@ -73,9 +76,17 @@ public class HomeController {
                              ModelMap model, final HttpServletRequest request,
                              Principal principal) throws IOException {
         if (principal != null) {
-            UploadFileProvider provider = new UploadAbsoluteFileProvider(fileSystem.buildHomePath(dir, principal.getName()).toString(), file.getOriginalFilename());
-            provider.write(file.getInputStream());
-            return "redirect:/home?path=" + dir;
+            String mes;
+            try {
+                UploadFileProvider provider = new UploadAbsoluteFileProvider(fileSystem.buildHomePath(dir, principal.getName()).toString(), file.getOriginalFilename());
+                provider.write(file.getInputStream());
+                mes="&message=message.fileUploaded";
+            } catch (DirectoryNotFoundException ex) {
+                mes = "&error=error.directoryNotFound";
+            } catch (FileAlreadyExistsException ex) {
+                mes = "&error=error.fileExists";
+            }
+            return "redirect:/home?path=" + dir + mes;
         } else
             return "redirect:/index";
     }
@@ -85,14 +96,14 @@ public class HomeController {
                             @RequestParam(value = "path", required = true) String sharedPath,
                             Principal principal, ModelMap model) throws IOException {
         if (principal != null) {
+            String mes;
             try {
                 sharedPathService.shareHomePath(principal.getName(), targetUsername, sharedPath);
-                model.put("message", "Shared successfully");
-                return "redirect:/home?path=" + sharedPath;
+                mes="&message=message.shared";
             } catch (UserNotFoundException e) {
-                model.put("message", "Share error. User not found");
-                return "redirect:/home?path=" + sharedPath;
+                mes = "&error=error.shareError";
             }
+            return "redirect:/home?path=" + sharedPath + mes;
         } else
             return "redirect:/index";
     }
@@ -101,8 +112,16 @@ public class HomeController {
     public String mkdir(@RequestParam(value = "name") String name,
                         @RequestParam(value = "directory") String dir,
                         Principal principal) throws IOException {
-        String username = principal.getName();
-        fileSystem.mkdirHome(dir, name, username);
-        return "redirect:/home?path=" + dir;
+        String mes;
+        try {
+            String username = principal.getName();
+            fileSystem.mkdirHome(dir, name, username);
+            mes="&message=message.directoryCreated";
+        } catch (DirectoryAlreadyExistsException ex) {
+            mes = "&error=error.directoryExists";
+        } catch (DirectoryNotFoundException ex) {
+            mes = "&error=error.directoryNotFound";
+        }
+        return "redirect:/home?path=" + dir + mes;
     }
 }

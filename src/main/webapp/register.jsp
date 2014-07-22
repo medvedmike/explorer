@@ -16,9 +16,6 @@
 <div class="row">
     <div style="margin-top: 20px;" class="columns large-centered large-8" id="content">
         <div class="row collapse">
-            <c:if test="${!empty errorCode}">
-                <div data-alert class="alert-box alert"><spring:message code="${errorCode}"/></div>
-            </c:if>
             <c:if test="${!empty errors}">
                 <c:forEach items="${errors}" var="error">
                     <div data-alert class="alert-box alert"><spring:message code="${error.defaultMessage}"/></div>
