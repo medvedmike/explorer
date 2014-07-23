@@ -38,12 +38,7 @@ public class AccessController {
      * @return
      */
     private boolean isAdmin(Authentication authentication) {
-         return authentication.getAuthorities().stream().anyMatch(new Predicate<GrantedAuthority>() {
-            @Override
-            public boolean test(GrantedAuthority o) {
-                return o.toString().compareTo("ROLE_ADMIN") == 0;
-            }
-        });
+         return authentication.getAuthorities().stream().anyMatch(o -> o.toString().compareTo("ROLE_ADMIN") == 0);
     }
 
     /**
@@ -89,14 +84,13 @@ public class AccessController {
         if (!path.equals("")) {
             List<SharedPath> paths = sharedPathService.getPathsByTargetUsername(username);
             final Path p = Paths.get(path).toRealPath();
-            if (!paths.stream().anyMatch(new Predicate<SharedPath>() {
-                @Override
-                public boolean test(SharedPath sharedPath) {
-                    return p.startsWith(sharedPath.getPath());
-                }
-            })) {
+            if (!isAllowedPath(p, paths)) {
                 throw new AccessDeniedException();
             }
         }
+    }
+
+    private boolean isAllowedPath(Path path, List<SharedPath> allowedPaths) {
+        return allowedPaths.stream().anyMatch(sharedPath -> path.startsWith(sharedPath.getPath()));
     }
 }

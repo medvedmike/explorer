@@ -10,9 +10,11 @@ import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
 import com.explorer.service.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.URLEditor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
 
@@ -30,7 +36,7 @@ import java.security.Principal;
  */
 @Controller
 @RequestMapping("/server")
-public class ServerController {
+public class ServerController implements ControllerExceptionsHandler {
 
     @Autowired
     private ApplicationContext context;
@@ -88,18 +94,12 @@ public class ServerController {
      */
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam(value = "file") MultipartFile file,
-                             @RequestParam(value = "directory") String dir,
+                             @RequestParam(value = "path") String dir,
                              ModelMap model, final HttpServletRequest request) throws IOException {
         String mes;
-        try {
-            UploadFileProvider provider = new UploadAbsoluteFileProvider(dir, file.getOriginalFilename());
-            provider.write(file.getInputStream());
-            mes="&message=message.fileUploaded";
-        } catch (DirectoryNotFoundException ex) {
-            mes = "&error=error.directoryNotFound";
-        } catch (FileAlreadyExistsException ex) {
-            mes = "&error=error.fileExists";
-        }
+        UploadFileProvider provider = new UploadAbsoluteFileProvider(dir, file.getOriginalFilename());
+        provider.write(file.getInputStream());
+        mes="&message=message.fileUploaded";
         return "redirect:/server?path=" + dir + mes;
     }
 
@@ -113,17 +113,11 @@ public class ServerController {
      */
     @RequestMapping(value = "/directory", method = RequestMethod.POST)
     public String mkdir(@RequestParam(value = "name") String name,
-                        @RequestParam(value = "directory") String dir,
+                        @RequestParam(value = "path") String dir,
                         ModelMap model) throws IOException {
         String mes;
-        try {
-            fileSystem.mkdirGlobal(dir, name);
-            mes="&message=message.directoryCreated";
-        } catch (DirectoryAlreadyExistsException ex) {
-            mes = "&error=error.directoryExists";
-        } catch (DirectoryNotFoundException ex) {
-            mes = "&error=error.directoryNotFound";
-        }
+        fileSystem.mkdirGlobal(dir, name);
+        mes="&message=message.directoryCreated";
         return "redirect:/server?path=" + dir + mes;
     }
 
@@ -141,16 +135,16 @@ public class ServerController {
                             Principal principal, ModelMap model) {
         if (principal != null) {
             String mes;
-            try {
-                sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
-                mes="&message=message.shared";
-            } catch (UserNotFoundException e) {
-                mes = "&error=error.shareError";
-            }
+            sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
+            mes="&message=message.shared";
             return "redirect:/server?path=" + sharedPath + mes;
         } else {
             return "redirect:/index";
         }
     }
 
+    @Override
+    public String getBaseUrl() {
+        return "/server";
+    }
 }

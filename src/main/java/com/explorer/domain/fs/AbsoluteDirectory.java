@@ -20,7 +20,7 @@ public class AbsoluteDirectory implements Directory {
     protected Path path;
     protected boolean root;
     protected List<FileInfo> children;
-    protected List<Breadcrumb> breadcrumbs;
+    protected List<PathPart> breadcrumbs;
 
     protected AbsoluteDirectory() {}
 
@@ -45,7 +45,7 @@ public class AbsoluteDirectory implements Directory {
                 Path next = p.getParent();
                 String pth = p.toString();
                 name = next == null ? pth : p.getFileName().toString();
-                breadcrumbs.add(new Breadcrumb(name, pth));
+                breadcrumbs.add(new PathPart(name, pth));
                 p = next;
             } while (p != null);
             Collections.reverse(breadcrumbs);
@@ -87,9 +87,9 @@ public class AbsoluteDirectory implements Directory {
     }
 
     @Override
-    public Breadcrumb[] getBreadcrumbs() {
+    public PathPart[] getBreadcrumbs() {
         if (breadcrumbs == null) return null;
-        Breadcrumb[] res = new Breadcrumb[breadcrumbs.size()];
+        PathPart[] res = new PathPart[breadcrumbs.size()];
         return breadcrumbs.toArray(res);
     }
 

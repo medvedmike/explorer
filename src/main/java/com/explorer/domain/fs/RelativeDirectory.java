@@ -20,7 +20,7 @@ public class RelativeDirectory implements Directory {
     private Path relate;
     private boolean root;
     private List<FileInfo> children;
-    protected List<Breadcrumb> breadcrumbs;
+    protected List<PathPart> breadcrumbs;
 
     public static int subIndex(Path path, Path relate) {
         Path name = relate.getFileName();
@@ -58,10 +58,10 @@ public class RelativeDirectory implements Directory {
                 Path next = p.getParent();
                 String pth = p.toString();
                 name = next == null ? pth : p.getFileName().toString();
-                breadcrumbs.add(new Breadcrumb(name, pth));
+                breadcrumbs.add(new PathPart(name, pth));
                 p = next;
             } while (p != null);
-            breadcrumbs.add(new Breadcrumb(relate.getFileName().toString(), ""));
+            breadcrumbs.add(new PathPart(relate.getFileName().toString(), ""));
             Collections.reverse(breadcrumbs);
         }
     }
@@ -83,7 +83,7 @@ public class RelativeDirectory implements Directory {
             if (parent != null)
                 return parent.toString();
         }
-        return null;//TODO maybe exception
+        return null;
     }
 
     @Override
@@ -93,9 +93,9 @@ public class RelativeDirectory implements Directory {
     }
 
     @Override
-    public Breadcrumb[] getBreadcrumbs() {
+    public PathPart[] getBreadcrumbs() {
         if (breadcrumbs == null) return null;
-        Breadcrumb[] res = new Breadcrumb[breadcrumbs.size()];
+        PathPart[] res = new PathPart[breadcrumbs.size()];
         return breadcrumbs.toArray(res);
     }
 

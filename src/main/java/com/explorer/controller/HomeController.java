@@ -31,7 +31,7 @@ import java.security.Principal;
  */
 @Controller
 @RequestMapping(value = "/home")
-public class HomeController {
+public class HomeController implements ControllerExceptionsHandler {
 
     @Autowired
     private FileSystemService fileSystem;
@@ -100,20 +100,14 @@ public class HomeController {
      */
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam(value = "file") MultipartFile file,
-                             @RequestParam(value = "directory") String dir,
+                             @RequestParam(value = "path") String dir,
                              ModelMap model, final HttpServletRequest request,
                              Principal principal) throws IOException {
         if (principal != null) {
             String mes;
-            try {
-                UploadFileProvider provider = new UploadAbsoluteFileProvider(fileSystem.buildHomePath(dir, principal.getName()).toString(), file.getOriginalFilename());
-                provider.write(file.getInputStream());
-                mes="&message=message.fileUploaded";
-            } catch (DirectoryNotFoundException ex) {
-                mes = "&error=error.directoryNotFound";
-            } catch (FileAlreadyExistsException ex) {
-                mes = "&error=error.fileExists";
-            }
+            UploadFileProvider provider = new UploadAbsoluteFileProvider(fileSystem.buildHomePath(dir, principal.getName()).toString(), file.getOriginalFilename());
+            provider.write(file.getInputStream());
+            mes="&message=message.fileUploaded";
             return "redirect:/home?path=" + dir + mes;
         } else
             return "redirect:/index";
@@ -134,12 +128,8 @@ public class HomeController {
                             Principal principal, ModelMap model) throws IOException {
         if (principal != null) {
             String mes;
-            try {
-                sharedPathService.shareHomePath(principal.getName(), targetUsername, sharedPath);
-                mes="&message=message.shared";
-            } catch (UserNotFoundException e) {
-                mes = "&error=error.shareError";
-            }
+            sharedPathService.shareHomePath(principal.getName(), targetUsername, sharedPath);
+            mes="&message=message.shared";
             return "redirect:/home?path=" + sharedPath + mes;
         } else
             return "redirect:/index";
@@ -155,18 +145,17 @@ public class HomeController {
      */
     @RequestMapping(value = "/directory", method = RequestMethod.POST)
     public String mkdir(@RequestParam(value = "name") String name,
-                        @RequestParam(value = "directory") String dir,
+                        @RequestParam(value = "path") String dir,
                         Principal principal) throws IOException {
         String mes;
-        try {
-            String username = principal.getName();
-            fileSystem.mkdirHome(dir, name, username);
-            mes="&message=message.directoryCreated";
-        } catch (DirectoryAlreadyExistsException ex) {
-            mes = "&error=error.directoryExists";
-        } catch (DirectoryNotFoundException ex) {
-            mes = "&error=error.directoryNotFound";
-        }
+        String username = principal.getName();
+        fileSystem.mkdirHome(dir, name, username);
+        mes="&message=message.directoryCreated";
         return "redirect:/home?path=" + dir + mes;
+    }
+
+    @Override
+    public String getBaseUrl() {
+        return "/home";
     }
 }

@@ -58,7 +58,7 @@
 
     <div class="f-dropdown content" data-dropdown-content id="mkdir-dropdown">
         <form data-abide action="<c:url value="${url}/directory"/>" method="post">
-            <input style="display: none;" type="text" name="directory" value="${directory.path}">
+            <input style="display: none;" type="text" name="path" value="${directory.path}">
             <input type="text" name="name" required placeholder="folder name">
             <small class="error"><spring:message code="inputError.folderName"/></small>
             <input class="button" type="submit" value="Create">
@@ -67,7 +67,7 @@
 
     <div class="f-dropdown content small" data-dropdown-content id="upload-dropdown">
         <form data-abide action="<c:url value="${url}/file"/>" method="post" enctype="multipart/form-data">
-            <input style="display: none;" type="text" name="directory" value="${directory.path}">
+            <input style="display: none;" type="text" name="path" value="${directory.path}">
             <input type="file" name="file" required>
             <small class="error"><spring:message code="inputError.selectFile"/></small>
             <input class="button" type="submit" value="Upload">

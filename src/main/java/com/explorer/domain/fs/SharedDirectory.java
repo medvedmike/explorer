@@ -23,14 +23,11 @@ public class SharedDirectory extends AbsoluteDirectory {
         path = null;
         root = true;
         children = new ArrayList<>();
-        sharedPaths.forEach(new Consumer<SharedPath>() {
-            @Override
-            public void accept(SharedPath sharedPath) {
+        sharedPaths.forEach(sharedPath -> {
             try {
                 children.add(new AbsoluteFileInfo(Paths.get(sharedPath.getPath()).toRealPath()));
             } catch (IOException e) {
                 throw new InternalServerErrorException(e.getMessage());
-            }
             }
         });
     }
@@ -50,10 +47,10 @@ public class SharedDirectory extends AbsoluteDirectory {
                 Path next = p.getParent();
                 String pth = p.toString();
                 name = next == null ? pth : p.getFileName().toString();
-                breadcrumbs.add(new Breadcrumb(name, pth));
+                breadcrumbs.add(new PathPart(name, pth));
                 p = next;
             } while (p != null && !name.equals(start));
-            breadcrumbs.add(new Breadcrumb("shared", ""));
+            breadcrumbs.add(new PathPart("shared", ""));
             Collections.reverse(breadcrumbs);
         }
     }

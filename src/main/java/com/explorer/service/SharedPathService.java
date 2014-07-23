@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface SharedPathService {
     public List<SharedPath> getPathsByTargetUsername(String username);
-    void sharePath(String sourceUsername, String targetUsername, String sharedPath) throws UserNotFoundException;
+    void sharePath(String sourceUsername, String targetUsername, String sharedPath) throws UserNotFoundException; //TODO проверять права при расшаривании
     void shareHomePath(String name, String targetUsername, String sharedPath) throws IOException, UserNotFoundException;
     public List<SharedPath> getPathsBySourceUsername(String username);
     public void deletePath(Integer id);

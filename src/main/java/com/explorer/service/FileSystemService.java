@@ -57,14 +57,13 @@ public class FileSystemService {
             return new SharedDirectory(paths);
         } else {
             final Path p = Paths.get(path).toRealPath();
-            SharedPath current = paths.stream().filter(new Predicate<SharedPath>() {
-                @Override
-                public boolean test(SharedPath sharedPath) {
-                    return p.startsWith(sharedPath.getPath());
-                }
-            }).findFirst().get();
+            SharedPath current = getSharedPathForPath(p, paths);
             return new SharedDirectory(Paths.get(current.getPath()), path);
         }
+    }
+
+    private SharedPath getSharedPathForPath(Path path, List<SharedPath> paths) {
+        return paths.stream().filter(sharedPath -> path.startsWith(sharedPath.getPath())).findFirst().get();
     }
 
     private void mkdir(Path path) throws IOException {
