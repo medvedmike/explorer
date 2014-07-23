@@ -1,6 +1,5 @@
 package com.explorer.controller;
 
-import com.explorer.domain.Message;
 import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
@@ -24,8 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Michael on 01.07.2014.
