@@ -55,14 +55,15 @@ public class UsersController {
         List<ObjectError> errors = new ArrayList<>();
         if (bindingResult.hasErrors()) { //проверка на ошибки в заполнении полей
             errors.addAll(bindingResult.getFieldErrors());
+            model.put("errors", errors);
             return "../../register";
         }
         User user = userService.getUser(newUser.getUsername());
         if (user != null) { //проверка на существование данного логина в системе
             errors.add(new ObjectError("user", "inputError.loginExists"));
+            model.put("errors", errors);
             return "../../register";
         }
-        model.put("errors", errors);
         userService.saveUser(newUser);
         return "redirect:/home";
     }
