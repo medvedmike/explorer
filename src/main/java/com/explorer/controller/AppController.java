@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Created by Michael on 11.07.2014.
+ * Контроллер отдает главную страницу приложения
  */
 @Controller
 public class AppController {

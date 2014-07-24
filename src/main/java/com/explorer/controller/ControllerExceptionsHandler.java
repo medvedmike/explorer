@@ -11,9 +11,16 @@ import java.nio.file.FileAlreadyExistsException;
 
 /**
  * Created by Michael on 23.07.2014.
+ * Интерфейс, содержит в себе дефолтные реализации обработчиков исключений.
+ * Путь по которому происходит редирект при возникновении исключения, обработчики получают через метод getBaseUrl(),
+ * который переобпределяется в классах наследниках.
  */
 public interface ControllerExceptionsHandler {
 
+    /**
+     * Метод получения адреса для редиректа
+     * @return
+     */
     public String getBaseUrl();
 
     @ExceptionHandler(DirectoryAlreadyExistsException.class)

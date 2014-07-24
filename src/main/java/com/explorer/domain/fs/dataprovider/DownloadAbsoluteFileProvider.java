@@ -1,6 +1,5 @@
 package com.explorer.domain.fs.dataprovider;
 
-import com.explorer.annotations.GlobalAccessPointcut;
 import com.explorer.domain.fs.dataprovider.exceptions.FileNotFoundOnServerException;
 
 import java.io.IOException;
@@ -11,6 +10,7 @@ import java.nio.file.Paths;
 
 /**
  * Created by Michael on 15.07.2014.
+ * Чтение файла из файловой системы по абсолютному пути
  */
 public class DownloadAbsoluteFileProvider implements DownloadFileProvider {
 

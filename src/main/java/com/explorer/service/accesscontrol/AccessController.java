@@ -1,13 +1,12 @@
 package com.explorer.service.accesscontrol;
 
 import com.explorer.domain.SharedPath;
-import com.explorer.service.accesscontrol.exceptions.AccessDeniedException;
-import com.explorer.service.accesscontrol.exceptions.UnauthorizedException;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.SharedPathService;
+import com.explorer.service.accesscontrol.exceptions.AccessDeniedException;
+import com.explorer.service.accesscontrol.exceptions.UnauthorizedException;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;

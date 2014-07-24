@@ -4,10 +4,10 @@ import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * Created by Michael on 24.07.2014.
+ * Сервис который предоставляет доступ к объектам, отвечающим за скачвание и загрузку файлов
  */
 public interface FilesService {
     public DownloadFileProvider getDownloadGlobalFileProvider(String path) throws IOException;

@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 
 /**
  * Created by Michael on 15.07.2014.
+ * Запись файла на диск по абсолютному пути
  */
 public class UploadAbsoluteFileProvider implements UploadFileProvider {
 

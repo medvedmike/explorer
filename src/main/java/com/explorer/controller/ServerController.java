@@ -1,8 +1,6 @@
 package com.explorer.controller;
 
-import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
-import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.FilesService;
@@ -57,7 +55,7 @@ public class ServerController implements ControllerExceptionsHandler {
     }
 
     /**
-     * Загрузка файла
+     * Загрузка файла по абсолютнопу пути
      * @param name
      * @param request
      * @param response
@@ -80,7 +78,7 @@ public class ServerController implements ControllerExceptionsHandler {
     /**
      * Отправка файла на сервер
      * @param file
-     * @param dir
+     * @param dir абсолютный путь к папке назначения
      * @param model
      * @param request
      * @return
@@ -100,7 +98,7 @@ public class ServerController implements ControllerExceptionsHandler {
     /**
      * создание папки
      * @param name
-     * @param dir
+     * @param dir абсолютный путь к папке назначения
      * @param model
      * @return
      * @throws IOException
@@ -116,8 +114,8 @@ public class ServerController implements ControllerExceptionsHandler {
     }
 
     /**
-     * Расшаривание файла
-     * @param targetUsername
+     * Предоставление доступа к папке
+     * @param targetUsername имя целевого пользователя, которому дается доступ к папке
      * @param sharedPath
      * @param principal
      * @param model

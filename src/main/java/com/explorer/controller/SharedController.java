@@ -1,13 +1,11 @@
 package com.explorer.controller;
 
-import com.explorer.service.FilesService;
-import com.explorer.service.accesscontrol.exceptions.UnauthorizedException;
-import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
-import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
+import com.explorer.service.FilesService;
 import com.explorer.service.SharedPathService;
+import com.explorer.service.accesscontrol.exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -44,7 +42,7 @@ public class SharedController implements ControllerExceptionsHandler {
     private FilesService filesService;
 
     /**
-     * Просмотр списка доступных путей для данного пользователя
+     * Просмотр списка доступных путей общих папок для данного пользователя
      * @param model
      * @param principal
      * @return
@@ -63,7 +61,7 @@ public class SharedController implements ControllerExceptionsHandler {
 
     /**
      * Просмотр файлов в расшареной папке
-     * @param path
+     * @param path абсолютный путь к папке
      * @param model
      * @param principal
      * @return

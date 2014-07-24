@@ -30,12 +30,7 @@ public class AbsoluteDirectory implements Directory {
             path = file;
             Stream<Path> list = Files.list(file);
             children = new ArrayList<>();
-            list.forEach(new Consumer<Path>() {
-                @Override
-                public void accept(Path path) {
-                    children.add(new AbsoluteFileInfo(path));
-                }
-            });
+            list.forEach(path1 -> children.add(new AbsoluteFileInfo(path1)));
 
             int max = path.getNameCount();
             breadcrumbs = new ArrayList<>(max);
@@ -54,12 +49,7 @@ public class AbsoluteDirectory implements Directory {
             path = null;
             Stream<File> list = Arrays.stream(File.listRoots());
             children = new ArrayList<>();
-            list.forEach(new Consumer<File>() {
-                @Override
-                public void accept(File file) {
-                    children.add(new AbsoluteFileInfo(file.toPath()));
-                }
-            });
+            list.forEach(file1 -> children.add(new AbsoluteFileInfo(file1.toPath())));
         }
     }
 

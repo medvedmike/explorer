@@ -1,8 +1,6 @@
 package com.explorer.controller;
 
-import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
-import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.FilesService;
@@ -25,6 +23,7 @@ import java.security.Principal;
 /**
  * Created by Michael on 11.07.2014.
  * Управление файлами в домашних каталогах пользователей
+ * Контроллер обрабатывает просмотр, загрузку файлов, скачивание файлов и создание дирректорий в домашнем каталоге пользователя
  */
 @Controller
 @RequestMapping(value = "/home")
@@ -45,7 +44,9 @@ public class HomeController implements ControllerExceptionsHandler {
 
     /**
      * Отображение файлов из домашней дирректории пользователя
-     * @param path относительный путь к файлу
+     * Метод обрабатывает запросы на просмотр файлов в папках по относительному пути (отностельно
+     * домашнего каталога пользователя)
+     * @param path относительный путь к папке
      * @param model
      * @param principal
      * @return
@@ -63,7 +64,7 @@ public class HomeController implements ControllerExceptionsHandler {
     }
 
     /**
-     * Загрузка файла
+     * Загрузка файла из каталога пользователя
      * @param name имя файла
      * @param request
      * @param response
@@ -91,7 +92,7 @@ public class HomeController implements ControllerExceptionsHandler {
     /**
      * Отправка файла на сервер
      * @param file файл
-     * @param dir относительный путь к папке назначения
+     * @param dir относительный путь к папке назначения (относительно каталога текущего пользователя)
      * @param model
      * @param request
      * @param principal
@@ -115,7 +116,7 @@ public class HomeController implements ControllerExceptionsHandler {
     }
 
     /**
-     * Расшаривание дирректории
+     * Предоставление доступа к дирректории назодящейся в каталоге пользователя
      * @param targetUsername имя целевого пользователя
      * @param sharedPath путь к папке
      * @param principal
@@ -137,7 +138,7 @@ public class HomeController implements ControllerExceptionsHandler {
     }
 
     /**
-     * Создание папки
+     * Создание папки в каталоге пользователя
      * @param name имя новой папки
      * @param dir целевая папка
      * @param principal

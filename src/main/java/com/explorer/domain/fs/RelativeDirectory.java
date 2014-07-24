@@ -101,7 +101,7 @@ public class RelativeDirectory implements Directory {
 
     @Override
     public boolean isRoot() {
-        return false; //TODO hack
+        return false;
     }
 
     @Override

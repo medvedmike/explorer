@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by Michael on 08.07.2014.
+ * Контроллер для управления пользователями
  */
 @Controller
 public class UsersController {

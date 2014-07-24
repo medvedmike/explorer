@@ -8,7 +8,6 @@ import com.explorer.domain.fs.AbsoluteDirectory;
 import com.explorer.domain.fs.Directory;
 import com.explorer.domain.fs.RelativeDirectory;
 import com.explorer.domain.fs.SharedDirectory;
-import com.explorer.service.accesscontrol.exceptions.AccessDeniedException;
 import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
