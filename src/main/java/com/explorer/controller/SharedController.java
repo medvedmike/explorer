@@ -133,7 +133,7 @@ public class SharedController implements ControllerExceptionsHandler {
                             Principal principal, ModelMap model) throws IOException {
         if (principal != null) {
             String mes;
-            sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
+            sharedPathService.shareSharedPath(sharedPath, principal.getName(), targetUsername);
             mes="&message=message.shared";
             return "redirect:/shared?path=" + sharedPath + mes;
         } else {

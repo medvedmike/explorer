@@ -1,5 +1,6 @@
 package com.explorer.domain.fs.dataprovider;
 
+import com.explorer.annotations.GlobalAccessPointcut;
 import com.explorer.domain.fs.dataprovider.exceptions.FileNotFoundOnServerException;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class DownloadAbsoluteFileProvider implements DownloadFileProvider {
 
     public DownloadAbsoluteFileProvider(String fileName) throws IOException {
         path = Paths.get(fileName).toRealPath();
-        if (!Files.exists(path) || Files.isDirectory(path)) //проверка на то что файл существует и действительно является файлом
+        if (!Files.exists(path) || Files.isDirectory(path))
             throw new FileNotFoundOnServerException();
     }
 

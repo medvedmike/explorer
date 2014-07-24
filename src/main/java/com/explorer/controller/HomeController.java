@@ -124,7 +124,7 @@ public class HomeController implements ControllerExceptionsHandler {
                             Principal principal, ModelMap model) throws IOException {
         if (principal != null) {
             String mes;
-            sharedPathService.shareHomePath(principal.getName(), targetUsername, sharedPath);
+            sharedPathService.shareHomePath(sharedPath, principal.getName(), targetUsername);
             mes="&message=message.shared";
             return "redirect:/home?path=" + sharedPath + mes;
         } else

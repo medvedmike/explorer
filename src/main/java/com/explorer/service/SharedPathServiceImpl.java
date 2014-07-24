@@ -1,5 +1,8 @@
 package com.explorer.service;
 
+import com.explorer.annotations.GlobalAccessPointcut;
+import com.explorer.annotations.HomeAccessPointcut;
+import com.explorer.annotations.SharedAccessPointcut;
 import com.explorer.dao.SharedPathDAO;
 import com.explorer.dao.UserDAO;
 import com.explorer.domain.SharedPath;
@@ -33,14 +36,13 @@ public class SharedPathServiceImpl implements SharedPathService{
         return sharedPathDAO.getPathsByTargetUsername(username);
     }
 
-    @Override
-    @Transactional
-    public void sharePath(String sourceUsername, String targetUsername, String sharedPath) throws UserNotFoundException {
+    @GlobalAccessPointcut
+    private void sharePath(String sharedPath, String sourceUsername, String targetUsername) throws UserNotFoundException {
         User source = userDAO.getUser(sourceUsername);
         User dest = userDAO.getUser(targetUsername);
         if (dest == null)
             throw new UserNotFoundException();
-        SharedPath path = new SharedPath(); //TODO check rights
+        SharedPath path = new SharedPath();
         path.setSourceUser(source);
         path.setTargetUser(dest);
         path.setPath(sharedPath);
@@ -49,8 +51,23 @@ public class SharedPathServiceImpl implements SharedPathService{
 
     @Override
     @Transactional
-    public void shareHomePath(String name, String targetUsername, String sharedPath) throws IOException, UserNotFoundException {
-        sharePath(name, targetUsername, fileSystem.buildHomePath(sharedPath, name).toString());
+    @GlobalAccessPointcut
+    public void shareGlobalPath(String sharedPath, String name, String targetUsername) throws UserNotFoundException {
+        sharePath(sharedPath, name, targetUsername);
+    }
+
+    @Override
+    @Transactional
+    @SharedAccessPointcut
+    public void shareSharedPath(String sharedPath, String sourceUsername, String targetUsername) throws UserNotFoundException, IOException {
+        sharePath(sharedPath, sourceUsername, targetUsername);
+    }
+
+    @Override
+    @Transactional
+    @HomeAccessPointcut
+    public void shareHomePath(String sharedPath, String name, String targetUsername) throws IOException, UserNotFoundException {
+        sharePath(fileSystem.buildHomePath(sharedPath, name).toString(), name, targetUsername);
     }
 
     @Override

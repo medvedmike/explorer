@@ -125,7 +125,7 @@ public class ServerController implements ControllerExceptionsHandler {
                             Principal principal, ModelMap model) {
         if (principal != null) {
             String mes;
-            sharedPathService.sharePath(principal.getName(), targetUsername, sharedPath);
+            sharedPathService.shareGlobalPath(sharedPath, principal.getName(), targetUsername);
             mes="&message=message.shared";
             return "redirect:/server?path=" + sharedPath + mes;
         } else {
