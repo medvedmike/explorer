@@ -122,10 +122,7 @@ public class FileSystemService {
 
     public Path buildHomePath(String path, String username) throws IOException {
         Path userdir = Paths.get(getWorkingDirectoryName(), username);
-        Path p = Paths.get(userdir.toString(), path).toRealPath();
-        if (!p.startsWith(userdir))
-            throw new AccessDeniedException();
-        return p;
+        return Paths.get(userdir.toString(), path).toRealPath();
     }
 
 }

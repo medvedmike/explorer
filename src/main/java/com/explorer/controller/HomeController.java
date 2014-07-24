@@ -5,6 +5,7 @@ import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
+import com.explorer.service.FilesService;
 import com.explorer.service.SharedPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -37,6 +38,9 @@ public class HomeController implements ControllerExceptionsHandler {
 
     @Autowired
     private SharedPathService sharedPathService;
+
+    @Autowired
+    private FilesService filesService;
 
 
     /**
@@ -71,7 +75,7 @@ public class HomeController implements ControllerExceptionsHandler {
                              final HttpServletRequest request, final HttpServletResponse response,
                              Principal principal) throws IOException {
         if (principal != null) {
-            DownloadFileProvider provider = new DownloadAbsoluteFileProvider(fileSystem.buildHomePath(name, principal.getName()).toString());
+            DownloadFileProvider provider = filesService.getDownloadHomeFileProvider(name, principal.getName());
             String mimeType = request.getSession().getServletContext().getMimeType(name);
             if (mimeType == null) {
                 mimeType = "application/octet-stream";
@@ -101,7 +105,8 @@ public class HomeController implements ControllerExceptionsHandler {
                              Principal principal) throws IOException {
         if (principal != null) {
             String mes;
-            UploadFileProvider provider = new UploadAbsoluteFileProvider(fileSystem.buildHomePath(dir, principal.getName()).toString(), file.getOriginalFilename());
+            UploadFileProvider provider = filesService.getUploadHomeFileProvider(dir,
+                    principal.getName(), file.getOriginalFilename());
             provider.write(file.getInputStream());
             mes="&message=message.fileUploaded";
             return "redirect:/home?path=" + dir + mes;

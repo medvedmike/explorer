@@ -5,6 +5,7 @@ import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
+import com.explorer.service.FilesService;
 import com.explorer.service.SharedPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -37,6 +38,9 @@ public class ServerController implements ControllerExceptionsHandler {
     @Autowired
     private SharedPathService sharedPathService;
 
+    @Autowired
+    private FilesService filesService;
+
     /**
      * Просмотр файлов на всем сервере (для администратора)
      * @param path абсолютный путь
@@ -62,7 +66,7 @@ public class ServerController implements ControllerExceptionsHandler {
     @RequestMapping(value = "/file", method = RequestMethod.GET)
     public void downloadFile(@RequestParam(value = "name", required = true) String name,
                              final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        DownloadFileProvider provider = new DownloadAbsoluteFileProvider(name);
+        DownloadFileProvider provider = filesService.getDownloadGlobalFileProvider(name);
         String mimeType = request.getSession().getServletContext().getMimeType(name);
         if (mimeType == null) {
             mimeType = "application/octet-stream";
@@ -87,7 +91,7 @@ public class ServerController implements ControllerExceptionsHandler {
                              @RequestParam(value = "path") String dir,
                              ModelMap model, final HttpServletRequest request) throws IOException {
         String mes;
-        UploadFileProvider provider = new UploadAbsoluteFileProvider(dir, file.getOriginalFilename());
+        UploadFileProvider provider = filesService.getUploadGlobalFileProvider(dir, file.getOriginalFilename());
         provider.write(file.getInputStream());
         mes="&message=message.fileUploaded";
         return "redirect:/server?path=" + dir + mes;

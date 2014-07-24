@@ -1,5 +1,6 @@
 package com.explorer.controller;
 
+import com.explorer.service.FilesService;
 import com.explorer.service.accesscontrol.exceptions.UnauthorizedException;
 import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
@@ -38,6 +39,9 @@ public class SharedController implements ControllerExceptionsHandler {
 
     @Autowired
     private ApplicationContext context;
+
+    @Autowired
+    private FilesService filesService;
 
     /**
      * Просмотр списка доступных путей для данного пользователя
@@ -86,8 +90,9 @@ public class SharedController implements ControllerExceptionsHandler {
      */
     @RequestMapping(value = "/file", method = RequestMethod.GET)
     public void downloadFile(@RequestParam(value = "name", required = true) String name,
-                             final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        DownloadFileProvider provider = new DownloadAbsoluteFileProvider(name);
+                             final HttpServletRequest request, final HttpServletResponse response,
+                             Principal principal) throws IOException {
+        DownloadFileProvider provider = filesService.getDownloadSharedFileProvider(name, principal.getName());
         String mimeType = request.getSession().getServletContext().getMimeType(name);
         if (mimeType == null) {
             mimeType = "application/octet-stream";
@@ -110,9 +115,9 @@ public class SharedController implements ControllerExceptionsHandler {
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam(value = "file") MultipartFile file,
                              @RequestParam(value = "path") String dir,
-                             ModelMap model, final HttpServletRequest request) throws IOException {
+                             ModelMap model, final HttpServletRequest request, Principal principal) throws IOException {
         String mes;
-        UploadFileProvider provider = new UploadAbsoluteFileProvider(dir, file.getOriginalFilename());
+        UploadFileProvider provider = filesService.getUploadSharedFileProvider(dir, principal.getName(), file.getOriginalFilename());
         provider.write(file.getInputStream());
         mes="&message=message.fileUploaded";
         return "redirect:/shared?path=" + dir + mes;
