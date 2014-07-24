@@ -51,7 +51,6 @@ public class AccessController {
 //    @Before(value = "execution(* com.explorer.service.FileSystemService.getDirectoryGlobal(String)) && args(path)", argNames = "path")
     @Before(value = "@annotation(com.explorer.annotations.GlobalAccessPointcut) && args(path, ..)", argNames = "path")
     public void checkGlobalDir(String path) {
-        System.out.println("!!!!!!!!!!!!!!!GLOBAL!!!!!!!!!!!!!!!!!");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();
@@ -67,7 +66,6 @@ public class AccessController {
      */
     @Before(value = "@annotation(com.explorer.annotations.HomeAccessPointcut) && args(path, username, ..)", argNames = "path, username")
     public void checkHomeDir(String path, String username) throws IOException {
-        System.out.println("!!!!!!!!!!!!!!!HOME!!!!!!!!!!!!!!!!!");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();
@@ -86,7 +84,6 @@ public class AccessController {
      */
     @Before(value = "@annotation(com.explorer.annotations.SharedAccessPointcut) && args(path, username, ..)", argNames = "path, username")
     public void checkSharedDir(final String path, String username) throws IOException {
-        System.out.println("!!!!!!!!!!!!!!!SHARED!!!!!!!!!!!!!!!!!");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();
