@@ -1,26 +1,30 @@
-package com.explorer.domain.fs.accesscontrol;
+package com.explorer.service.accesscontrol;
 
 import com.explorer.domain.SharedPath;
-import com.explorer.domain.fs.accesscontrol.exceptions.AccessDeniedException;
-import com.explorer.domain.fs.accesscontrol.exceptions.UnauthorizedException;
+import com.explorer.service.accesscontrol.exceptions.AccessDeniedException;
+import com.explorer.service.accesscontrol.exceptions.UnauthorizedException;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.SharedPathService;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Created by Michael on 17.07.2014.
  * Класс-аспект для проверки возможности доступа пользователей к тем или иным путям на сервере
  */
+@Aspect
+@Component
 public class AccessController {
 
     @Autowired
@@ -43,9 +47,12 @@ public class AccessController {
 
     /**
      * Проверка возможности доступа пользователя к глобальным путям на сервере
-     * @param path
+//     * @param path
      */
+//    @Before(value = "execution(* com.explorer.service.FileSystemService.getDirectoryGlobal(String)) && args(path)", argNames = "path")
+    @Before(value = "@annotation(com.explorer.annotations.GlobalAccessPointcut) && args(path, ..)", argNames = "path")
     public void checkGlobalDir(String path) {
+        System.out.println("!!!!!!!!!!!!!!!GLOBAL!!!!!!!!!!!!!!!!!");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();
@@ -59,7 +66,9 @@ public class AccessController {
      * @param username
      * @throws IOException
      */
+    @Before(value = "@annotation(com.explorer.annotations.HomeAccessPointcut) && args(path, username, ..)", argNames = "path, username")
     public void checkHomeDir(String path, String username) throws IOException {
+        System.out.println("!!!!!!!!!!!!!!!HOME!!!!!!!!!!!!!!!!!");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();
@@ -76,7 +85,9 @@ public class AccessController {
      * @param username
      * @throws IOException
      */
+    @Before(value = "@annotation(com.explorer.annotations.SharedAccessPointcut) && args(path, username, ..)", argNames = "path, username")
     public void checkSharedDir(final String path, String username) throws IOException {
+        System.out.println("!!!!!!!!!!!!!!!SHARED!!!!!!!!!!!!!!!!!");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null)
             throw new UnauthorizedException();

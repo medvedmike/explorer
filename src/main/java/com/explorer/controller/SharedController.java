@@ -1,15 +1,12 @@
 package com.explorer.controller;
 
-import com.explorer.domain.fs.accesscontrol.exceptions.UnauthorizedException;
+import com.explorer.service.accesscontrol.exceptions.UnauthorizedException;
 import com.explorer.domain.fs.dataprovider.DownloadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadAbsoluteFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.SharedPathService;
-import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
-import com.explorer.service.exceptions.DirectoryNotFoundException;
-import com.explorer.service.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -23,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
 
 /**
@@ -158,7 +154,7 @@ public class SharedController implements ControllerExceptionsHandler {
                         @RequestParam(value = "path") String dir,
                         Principal principal) throws IOException {
         String mes;
-        fileSystem.mkdirShared(dir, name, principal.getName());
+        fileSystem.mkdirShared(dir, principal.getName(), name);
         mes="&message=message.directoryCreated";
         return "redirect:/shared?path=" + dir + mes;
     }

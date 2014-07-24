@@ -3,17 +3,10 @@ package com.explorer.controller;
 import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
 import com.explorer.service.exceptions.UserNotFoundException;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.tiles2.TilesView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.nio.file.FileAlreadyExistsException;
 
 /**

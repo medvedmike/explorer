@@ -1,4 +1,4 @@
-package com.explorer.domain.fs.accesscontrol.exceptions;
+package com.explorer.service.accesscontrol.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
