@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Created by Michael on 23.07.2014.
@@ -54,6 +57,17 @@ public interface ControllerExceptionsHandler {
         ModelAndView mav = new ModelAndView();
         mav.addObject("error", "error.fileExists");
         mav.addObject("path", request.getParameter("path"));
+        mav.setViewName("redirect:".concat(getBaseUrl()));
+        return mav;
+    }
+
+    @ExceptionHandler(java.nio.file.AccessDeniedException.class)
+    public default ModelAndView onAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("error", "error.accessDenied");
+        Path p = Paths.get(request.getParameter("path"));
+        mav.addObject("path", p == null ? "" :
+            p.getParent() == null ? "" : p.getParent().toString());
         mav.setViewName("redirect:".concat(getBaseUrl()));
         return mav;
     }

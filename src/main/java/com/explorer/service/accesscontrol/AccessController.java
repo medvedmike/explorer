@@ -46,9 +46,8 @@ public class AccessController {
 
     /**
      * Проверка возможности доступа пользователя к глобальным путям на сервере
-//     * @param path
+     * @param path
      */
-//    @Before(value = "execution(* com.explorer.service.FileSystemService.getDirectoryGlobal(String)) && args(path)", argNames = "path")
     @Before(value = "@annotation(com.explorer.annotations.GlobalAccessPointcut) && args(path, ..)", argNames = "path")
     public void checkGlobalDir(String path) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
