@@ -17,5 +17,6 @@ public interface SharedPathService {
     public List<SharedPath> getPathsBySourceUsername(String username);
     public void deletePath(Integer id);
     public void deletePath(SharedPath path);
+    public void deleteByPathValue(String path);
 
 }

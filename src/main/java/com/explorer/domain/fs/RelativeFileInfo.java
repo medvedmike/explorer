@@ -40,4 +40,9 @@ public class RelativeFileInfo implements FileInfo {
     public boolean isFile() {
         return Files.isRegularFile(absolutePath);
     }
+
+    @Override
+    public boolean isWritable() {
+        return Files.isWritable(absolutePath);
+    }
 }

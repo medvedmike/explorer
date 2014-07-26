@@ -10,4 +10,5 @@ public interface FileInfo {
     public String getPath(); //путь к файлу
     public long getSize() throws IOException; //размер
     public boolean isFile(); //является ли файлом
+    public boolean isWritable();
 }

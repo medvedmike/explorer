@@ -1,8 +1,6 @@
 package com.explorer.service;
 
-import com.explorer.annotations.GlobalAccessPointcut;
-import com.explorer.annotations.HomeAccessPointcut;
-import com.explorer.annotations.SharedAccessPointcut;
+import com.explorer.annotations.*;
 import com.explorer.domain.SharedPath;
 import com.explorer.domain.fs.AbsoluteDirectory;
 import com.explorer.domain.fs.Directory;
@@ -10,6 +8,7 @@ import com.explorer.domain.fs.RelativeDirectory;
 import com.explorer.domain.fs.SharedDirectory;
 import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +92,34 @@ public class FileSystemService {
         mkdir(Paths.get(path, name));
     }
 
+    private boolean deleteAbsolute(Path path) throws IOException {
+        sharedPathService.deleteByPathValue(path.toRealPath().toString());
+        if (Files.isDirectory(path)) {
+            FileUtils.deleteDirectory(path.toFile()); //TODO bug wtf??
+            return true;
+        } else {
+            return Files.deleteIfExists(path.toRealPath());
+        }
+    }
+
+    @GlobalAccessPointcut
+    @GlobalDeleteControl
+    public boolean deleteGlobal(String path) throws IOException {
+        return deleteAbsolute(Paths.get(path));
+    }
+
+    @SharedAccessPointcut
+    @SharedDeleteControl
+    public boolean deleteShared(String path, String username) throws IOException {
+        return deleteAbsolute(Paths.get(path));
+    }
+
+    @HomeAccessPointcut
+    @HomeDeleteControl
+    public boolean deleteHome(String path, String username) throws IOException {
+        return deleteAbsolute(Paths.get(getWorkingDirectoryName(), username, path));
+    }
+
     public Path getWorkingDirectoryPath() {
         if (workingHome == null)
             workingHome = Paths.get(System.getProperty("user.home"), "explorer home"); //TODO configurable
@@ -122,6 +149,10 @@ public class FileSystemService {
     public Path buildHomePath(String path, String username) throws IOException {
         Path userdir = Paths.get(getWorkingDirectoryName(), username);
         return Paths.get(userdir.toString(), path).toRealPath();
+    }
+
+    public Path getUserPath(String username) {
+        return Paths.get(getWorkingDirectoryName(), username);
     }
 
 }

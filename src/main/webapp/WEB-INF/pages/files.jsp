@@ -89,18 +89,28 @@
         <c:choose>
             <c:when test="${!element.file}">
                 <div class="element directory row collapse">
-                    <a class="large-10 columns open" href="<c:url value="/${url}"><c:param name="path" value="${element.path}"/></c:url>">
+                    <a class="large-11 columns open" href="<c:url value="/${url}"><c:param name="path" value="${element.path}"/></c:url>">
                         <c:out value="${element.name}"/>
                     </a>
+                    <c:if test="${element.writable and not directory.root}">
+                        <a class="large-1 columns delete text-right" href="
+                                <c:url value="/${url}/delete">
+                                    <c:param name="path" value="${element.path}"/>
+                                    <c:param name="current" value="${directory.path}"/>
+                                </c:url>
+                            ">
+                            <spring:message code="label.delete"/>
+                        </a>
+                    </c:if>
                 </div>
             </c:when>
             <c:otherwise>
                 <c:if test="${!directory.root}">
                     <div class="element file row collapse">
-                        <a class="large-10 columns" href="<c:url value="${url}/file"><c:param name="name" value="${element.path}"/></c:url>">
+                        <a class="large-9 columns" href="<c:url value="${url}/file"><c:param name="name" value="${element.path}"/></c:url>">
                             <c:out value="${element.name}"/>
                         </a>
-                        <span class="large-2 columns right-align size">
+                        <span class="large-2 columns text-right size">
                             <c:set var="size" value="${element.size}"/>
                             <c:choose>
                                 <c:when test="${size < 1000}">
@@ -117,6 +127,16 @@
                                 </c:otherwise>
                             </c:choose>
                         </span>
+                        <c:if test="${element.writable and not directory.root}">
+                            <a class="large-1 columns delete text-right" href="
+                                <c:url value="/${url}/delete">
+                                    <c:param name="path" value="${element.path}"/>
+                                    <c:param name="current" value="${directory.path}"/>
+                                </c:url>
+                            ">
+                                <spring:message code="label.delete"/>
+                            </a>
+                        </c:if>
                     </div>
                 </c:if>
             </c:otherwise>

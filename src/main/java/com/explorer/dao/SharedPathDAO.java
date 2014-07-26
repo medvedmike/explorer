@@ -40,4 +40,6 @@ public interface SharedPathDAO {
      * @param path объект, представляющий данные, которые нужно стереть
      */
     public void deletePath(SharedPath path);
+
+    public void deleteByPathValue(String path);
 }

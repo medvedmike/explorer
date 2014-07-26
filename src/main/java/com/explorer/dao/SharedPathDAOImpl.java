@@ -50,4 +50,11 @@ public class SharedPathDAOImpl implements SharedPathDAO {
         if (path != null)
             sessionFactory.getCurrentSession().delete(path);
     }
+
+    @Override
+    public void deleteByPathValue(String path) {
+        Query query = sessionFactory.getCurrentSession().createQuery("delete from SharedPath where path = :path");
+        query.setParameter("path", path);
+        query.executeUpdate();
+    }
 }

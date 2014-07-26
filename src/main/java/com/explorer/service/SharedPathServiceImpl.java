@@ -87,4 +87,10 @@ public class SharedPathServiceImpl implements SharedPathService{
     public void deletePath(SharedPath path) {
         sharedPathDAO.deletePath(path);
     }
+
+    @Override
+    @Transactional
+    public void deleteByPathValue(String path) {
+        sharedPathDAO.deleteByPathValue(path);
+    }
 }

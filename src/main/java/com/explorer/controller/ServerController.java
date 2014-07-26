@@ -135,6 +135,16 @@ public class ServerController implements ControllerExceptionsHandler {
         }
     }
 
+    @RequestMapping(value = "/delete", method = RequestMethod.GET, params = {"path"})
+    public String delete(@RequestParam(value = "path") String path,
+                         @RequestParam(value = "current", defaultValue = "") String current) throws IOException {
+        if (fileSystem.deleteGlobal(path)) {
+            return "redirect:/server?path=" + current + "&message=message.deleted";
+        } else {
+            return "redirect:/server?path=" + current + "&error=error.delete";
+        }
+    }
+
     @Override
     public String getBaseUrl() {
         return "/server";

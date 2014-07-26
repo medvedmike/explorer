@@ -35,4 +35,9 @@ public class AbsoluteFileInfo implements FileInfo {
     public boolean isFile() {
         return Files.isRegularFile(path);
     }
+
+    @Override
+    public boolean isWritable() {
+        return Files.isWritable(path);
+    }
 }

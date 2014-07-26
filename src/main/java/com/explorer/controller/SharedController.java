@@ -190,6 +190,17 @@ public class SharedController implements ControllerExceptionsHandler {
         return "my-shared";
     }
 
+    @RequestMapping(value = "/delete", method = RequestMethod.GET, params = {"path"})
+    public String delete(@RequestParam(value = "path") String path,
+                         @RequestParam(value = "current", defaultValue = "") String current,
+                         Principal principal) throws IOException {
+        if (fileSystem.deleteShared(path, principal.getName())) {
+            return "redirect:/shared?path=" + current + "&message=message.deleted";
+        } else {
+            return "redirect:/shared?path=" + current + "&error=error.delete";
+        }
+    }
+
     @Override
     public String getBaseUrl() {
         return "/shared";

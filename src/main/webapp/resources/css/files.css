@@ -25,6 +25,10 @@ div.element {
     box-shadow: 0px 0px 2px #222;
 }
 
+div.element a.delete {
+    color: red;
+}
+
 .control-panel {
     margin-top: 15px;
 }
