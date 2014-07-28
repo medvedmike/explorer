@@ -9,6 +9,7 @@ import com.explorer.domain.fs.SharedDirectory;
 import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
 import org.apache.commons.io.FileUtils;
+import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,14 +93,27 @@ public class FileSystemService {
         mkdir(Paths.get(path, name));
     }
 
+    private boolean delete(File directory) {
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files == null || files.length == 0) {
+                return directory.delete();
+            } else {
+                for (File f : files) {
+                    if (!delete(f)) {
+                        return false;
+                    }
+                }
+                return directory.list().length == 0 && directory.delete();
+            }
+        } else {
+            return directory.delete();
+        }
+    }
+
     private boolean deleteAbsolute(Path path) throws IOException {
         sharedPathService.deleteByPathValue(path.toRealPath().toString());
-        if (Files.isDirectory(path)) {
-            FileUtils.deleteDirectory(path.toFile()); //TODO bug wtf??
-            return true;
-        } else {
-            return Files.deleteIfExists(path.toRealPath());
-        }
+        return delete(path.toFile());
     }
 
     @GlobalAccessPointcut
