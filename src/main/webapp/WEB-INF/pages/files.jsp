@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="<c:url value="/resources/css/files.css"/>">
 
-<div class="errors">
+<div class="errors" id="errors">
     <c:if test="${!empty param.message}">
         <div data-alert class="alert-box medium success">
             <spring:message code="${param.message}"/>
@@ -146,5 +146,12 @@
 
 <script type="text/javascript" src="/resources/js/files.js"></script>
 <script type="text/javascript">
-
+    var alertContainer = document.getElementById("errors");
+    var alerts = alertContainer.getElementsByTagName("div");
+    var ind = 0;
+    for (ind; ind < alerts.length; ind++) {
+        setTimeout(function(arg) {
+            alertContainer.removeChild(arg);
+        }, 7000, alerts[ind]);
+    }
 </script>
