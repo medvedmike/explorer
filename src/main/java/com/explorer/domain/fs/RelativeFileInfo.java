@@ -16,9 +16,11 @@ public class RelativeFileInfo implements FileInfo {
     private String relation;
 
     public RelativeFileInfo(Path path, String relationParent) {
+        System.out.println("--new file: " + path.toString() + " parent: " + relationParent);
         absolutePath = path;
         relation = relationParent;
         this.path = Paths.get(relationParent, path.getFileName().toString());
+        System.out.println("--path: " + this.path.toString());
     }
 
     @Override

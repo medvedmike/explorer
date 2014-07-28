@@ -22,32 +22,19 @@ public class RelativeDirectory implements Directory {
     private List<FileInfo> children;
     protected List<PathPart> breadcrumbs;
 
-    public static int subIndex(Path path, Path relate) {
-        Path name = relate.getFileName();
-        for (int i = 0; i < path.getNameCount(); i++) {
-            if (path.getName(i).compareTo(name) == 0)
-                return i + 1;
-        }
-        return path.getNameCount() - 1;
-    }
-
     public RelativeDirectory(Path file, final Path relate) throws IOException {
+        System.out.println("absolutePath: " + file.toString() + " --relate: " + relate.toString());
         absolutePath = file;
         root = file.compareTo(relate) == 0;
-        if (!root)
-            path = file.subpath(subIndex(file, relate), file.getNameCount());
+        if (!root) {
+            path = file.subpath(relate.getNameCount(), file.getNameCount());
+            System.out.println("path: " + path.toString());
+        }
         this.relate = relate;
         Stream<Path> list = Files.list(file);
         children = new ArrayList<>();
-        list.forEach(new Consumer<Path>() {
-            @Override
-            public void accept(Path path) {
-                RelativeDirectory.this.children.add(new RelativeFileInfo(path, RelativeDirectory.this.path == null ?
-                        "" : RelativeDirectory.this.path.toString()));
-            }
-        });
-
-        String start = relate.getFileName().toString();
+        list.forEach(path1 -> RelativeDirectory.this.children.add(new RelativeFileInfo(path1, RelativeDirectory.this.path == null ?
+                "" : RelativeDirectory.this.path.toString())));
 
         if (path != null) {
             int max = path.getNameCount();

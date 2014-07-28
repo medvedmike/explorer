@@ -8,8 +8,6 @@ import com.explorer.domain.fs.RelativeDirectory;
 import com.explorer.domain.fs.SharedDirectory;
 import com.explorer.service.exceptions.DirectoryAlreadyExistsException;
 import com.explorer.service.exceptions.DirectoryNotFoundException;
-import org.apache.commons.io.FileUtils;
-import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
