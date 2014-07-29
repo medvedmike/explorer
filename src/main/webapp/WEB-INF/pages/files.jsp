@@ -68,8 +68,16 @@
     <div class="f-dropdown content small" data-dropdown-content id="upload-dropdown">
         <form data-abide action="<c:url value="${url}/file"/>" method="post" enctype="multipart/form-data">
             <input style="display: none;" type="text" name="path" value="${directory.path}">
-            <input type="file" name="file" required>
-            <small class="error"><spring:message code="inputError.selectFile"/></small>
+            <div class="row collapse">
+                <div class="columns small-10">
+                    <input type="text" id="filename" readonly required placeholder="file">
+                    <%--<small class="error"><spring:message code="inputError.selectFile"/></small>--%>
+                </div>
+                <div class="columns small-2">
+                    <a href="#" id="openfile" class="button postfix" onclick="openFile(this)">Open</a>
+                </div>
+            </div>
+            <input type="file" name="file" id="file" required style="display: none;">
             <input class="button" type="submit" value="Upload">
         </form>
     </div>
@@ -153,5 +161,21 @@
         setTimeout(function(arg) {
             alertContainer.removeChild(arg);
         }, 7000, alerts[ind]);
+    }
+
+    var isOpenFileOpen = false;
+
+    function openFile(btn) {
+        if (!isOpenFileOpen) {
+            isOpenFileOpen = true;
+            setTimeout(function() { isOpenFileOpen = false; }, 100);
+            var evt = document.createEvent("MouseEvents");
+            evt.initEvent("click", true, false);
+            var file = document.getElementById("file");
+            file.onchange = function () {
+                document.getElementById("filename").value = file.value;
+            };
+            file.dispatchEvent(evt);
+        }
     }
 </script>
