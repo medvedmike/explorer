@@ -4,6 +4,7 @@ import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.FilesService;
+import com.explorer.service.PermissionManager;
 import com.explorer.service.SharedPathService;
 import com.explorer.service.accesscontrol.exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class SharedController implements ControllerExceptionsHandler {
 
     @Autowired
     private FilesService filesService;
+
+    @Autowired
+    private PermissionManager permissionManager;
 
     /**
      * Просмотр списка доступных путей общих папок для данного пользователя
@@ -116,7 +120,7 @@ public class SharedController implements ControllerExceptionsHandler {
                              ModelMap model, final HttpServletRequest request, Principal principal) throws IOException {
         String mes;
         UploadFileProvider provider = filesService.getUploadSharedFileProvider(dir, principal.getName(), file.getOriginalFilename());
-        provider.write(file.getInputStream());
+        provider.write(file.getInputStream(), permissionManager.getDefault());
         mes="&message=message.fileUploaded";
         return "redirect:/shared?path=" + dir + mes;
     }

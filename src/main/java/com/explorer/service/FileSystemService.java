@@ -30,6 +30,9 @@ public class FileSystemService {
     @Autowired
     private SharedPathService sharedPathService;
 
+    @Autowired
+    private PermissionManager permissionManager;
+
     @GlobalAccessPointcut
     public Directory getDirectoryGlobal(String path) throws IOException {
         return getDirectoryAbsolute(path);
@@ -74,6 +77,14 @@ public class FileSystemService {
         if (Files.exists(path))
             throw new DirectoryAlreadyExistsException();
         Files.createDirectory(path);
+        try {
+            Files.setPosixFilePermissions(path, permissionManager.getDefaultDir());
+        } catch (UnsupportedOperationException ex) {
+            File file = path.toFile();
+            file.setReadable(true, false);
+            file.setWritable(true, true);
+            file.setExecutable(true, true);
+        }
     }
 
     @GlobalAccessPointcut

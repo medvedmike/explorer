@@ -16,7 +16,13 @@
     </bean>
 
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="/WEB-INF/jdbc.properties"/>
+        <property name="locations">
+            <list>
+                <value>/WEB-INF/jdbc.properties</value>
+                <value>classpath:app_config.properties</value>
+            </list>
+        </property>
+
     </bean>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

@@ -4,6 +4,7 @@ import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.FilesService;
+import com.explorer.service.PermissionManager;
 import com.explorer.service.SharedPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -40,6 +41,9 @@ public class HomeController implements ControllerExceptionsHandler {
 
     @Autowired
     private FilesService filesService;
+
+    @Autowired
+    private PermissionManager permissionManager;
 
 
     /**
@@ -108,7 +112,7 @@ public class HomeController implements ControllerExceptionsHandler {
             String mes;
             UploadFileProvider provider = filesService.getUploadHomeFileProvider(dir,
                     principal.getName(), file.getOriginalFilename());
-            provider.write(file.getInputStream());
+            provider.write(file.getInputStream(), permissionManager.getDefault());
             mes="&message=message.fileUploaded";
             return "redirect:/home?path=" + dir + mes;
         } else

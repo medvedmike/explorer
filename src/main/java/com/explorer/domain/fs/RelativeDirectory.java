@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -23,12 +22,10 @@ public class RelativeDirectory implements Directory {
     protected List<PathPart> breadcrumbs;
 
     public RelativeDirectory(Path file, final Path relate) throws IOException {
-        System.out.println("absolutePath: " + file.toString() + " --relate: " + relate.toString());
         absolutePath = file;
         root = file.compareTo(relate) == 0;
         if (!root) {
             path = file.subpath(relate.getNameCount(), file.getNameCount());
-            System.out.println("path: " + path.toString());
         }
         this.relate = relate;
         Stream<Path> list = Files.list(file);

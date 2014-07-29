@@ -4,6 +4,7 @@ import com.explorer.domain.fs.dataprovider.DownloadFileProvider;
 import com.explorer.domain.fs.dataprovider.UploadFileProvider;
 import com.explorer.service.FileSystemService;
 import com.explorer.service.FilesService;
+import com.explorer.service.PermissionManager;
 import com.explorer.service.SharedPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -38,6 +39,9 @@ public class ServerController implements ControllerExceptionsHandler {
 
     @Autowired
     private FilesService filesService;
+
+    @Autowired
+    private PermissionManager permissionManager;
 
     /**
      * Просмотр файлов на всем сервере (для администратора)
@@ -90,7 +94,7 @@ public class ServerController implements ControllerExceptionsHandler {
                              ModelMap model, final HttpServletRequest request) throws IOException {
         String mes;
         UploadFileProvider provider = filesService.getUploadGlobalFileProvider(dir, file.getOriginalFilename());
-        provider.write(file.getInputStream());
+        provider.write(file.getInputStream(), permissionManager.getDefault());
         mes="&message=message.fileUploaded";
         return "redirect:/server?path=" + dir + mes;
     }
