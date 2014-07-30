@@ -120,7 +120,7 @@ public class SharedController implements ControllerExceptionsHandler {
                              ModelMap model, final HttpServletRequest request, Principal principal) throws IOException {
         String mes;
         UploadFileProvider provider = filesService.getUploadSharedFileProvider(dir, principal.getName(), file.getOriginalFilename());
-        provider.write(file.getInputStream(), permissionManager.getDefault());
+        provider.write(file.getInputStream(), permissionManager.getDefaultFile());
         mes="&message=message.fileUploaded";
         return "redirect:/shared?path=" + dir + mes;
     }

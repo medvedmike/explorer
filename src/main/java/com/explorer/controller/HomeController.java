@@ -112,7 +112,7 @@ public class HomeController implements ControllerExceptionsHandler {
             String mes;
             UploadFileProvider provider = filesService.getUploadHomeFileProvider(dir,
                     principal.getName(), file.getOriginalFilename());
-            provider.write(file.getInputStream(), permissionManager.getDefault());
+            provider.write(file.getInputStream(), permissionManager.getDefaultFile());
             mes="&message=message.fileUploaded";
             return "redirect:/home?path=" + dir + mes;
         } else

@@ -94,7 +94,7 @@ public class ServerController implements ControllerExceptionsHandler {
                              ModelMap model, final HttpServletRequest request) throws IOException {
         String mes;
         UploadFileProvider provider = filesService.getUploadGlobalFileProvider(dir, file.getOriginalFilename());
-        provider.write(file.getInputStream(), permissionManager.getDefault());
+        provider.write(file.getInputStream(), permissionManager.getDefaultFile());
         mes="&message=message.fileUploaded";
         return "redirect:/server?path=" + dir + mes;
     }
