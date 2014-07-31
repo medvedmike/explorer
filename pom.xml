@@ -233,12 +233,6 @@
             <version>1.8.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.objectweb.think.minus</groupId>
-            <artifactId>posix</artifactId>
-            <version>1.0</version>
-        </dependency>
-
     </dependencies>
 
     <build>
