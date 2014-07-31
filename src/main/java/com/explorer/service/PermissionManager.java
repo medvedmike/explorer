@@ -17,102 +17,30 @@ public class PermissionManager {
     private @Value("${defaultDirectoryPermissions}") String defaultDirectoryPermissions;
 
     private void processOwner(Set<PosixFilePermission> perms, char symbol) {
-        switch (symbol) {
-            case '0':
-                break;
-            case '1':
-                perms.add(PosixFilePermission.OWNER_EXECUTE);
-                break;
-            case '2':
-                perms.add(PosixFilePermission.OWNER_WRITE);
-                break;
-            case '3':
-                perms.add(PosixFilePermission.OWNER_EXECUTE);
-                perms.add(PosixFilePermission.OWNER_WRITE);
-                break;
-            case '4':
-                perms.add(PosixFilePermission.OWNER_READ);
-                break;
-            case '5':
-                perms.add(PosixFilePermission.OWNER_READ);
-                perms.add(PosixFilePermission.OWNER_EXECUTE);
-                break;
-            case '6':
-                perms.add(PosixFilePermission.OWNER_READ);
-                perms.add(PosixFilePermission.OWNER_WRITE);
-                break;
-            case '7':
-                perms.add(PosixFilePermission.OWNER_READ);
-                perms.add(PosixFilePermission.OWNER_WRITE);
-                perms.add(PosixFilePermission.OWNER_EXECUTE);
-                break;
-        }
+        if (symbol == '1' || symbol == '3' || symbol == '5' || symbol == '7')
+            perms.add(PosixFilePermission.OWNER_EXECUTE);
+        if (symbol == '2' || symbol == '3' || symbol == '6' || symbol == '7')
+            perms.add(PosixFilePermission.OWNER_WRITE);
+        if (symbol == '4' || symbol == '5' || symbol == '6' || symbol == '7')
+            perms.add(PosixFilePermission.OWNER_READ);
     }
 
     private void processGroup(Set<PosixFilePermission> perms, char symbol) {
-        switch (symbol) {
-            case '0':
-                break;
-            case '1':
-                perms.add(PosixFilePermission.GROUP_EXECUTE);
-                break;
-            case '2':
-                perms.add(PosixFilePermission.GROUP_WRITE);
-                break;
-            case '3':
-                perms.add(PosixFilePermission.GROUP_EXECUTE);
-                perms.add(PosixFilePermission.GROUP_WRITE);
-                break;
-            case '4':
-                perms.add(PosixFilePermission.GROUP_READ);
-                break;
-            case '5':
-                perms.add(PosixFilePermission.GROUP_READ);
-                perms.add(PosixFilePermission.GROUP_EXECUTE);
-                break;
-            case '6':
-                perms.add(PosixFilePermission.GROUP_READ);
-                perms.add(PosixFilePermission.GROUP_WRITE);
-                break;
-            case '7':
-                perms.add(PosixFilePermission.GROUP_READ);
-                perms.add(PosixFilePermission.GROUP_WRITE);
-                perms.add(PosixFilePermission.GROUP_EXECUTE);
-                break;
-        }
+        if (symbol == '1' || symbol == '3' || symbol == '5' || symbol == '7')
+            perms.add(PosixFilePermission.GROUP_EXECUTE);
+        if (symbol == '2' || symbol == '3' || symbol == '6' || symbol == '7')
+            perms.add(PosixFilePermission.GROUP_WRITE);
+        if (symbol == '4' || symbol == '5' || symbol == '6' || symbol == '7')
+            perms.add(PosixFilePermission.GROUP_READ);
     }
 
     private void processOthers(Set<PosixFilePermission> perms, char symbol) {
-        switch (symbol) {
-            case '0':
-                break;
-            case '1':
-                perms.add(PosixFilePermission.OTHERS_EXECUTE);
-                break;
-            case '2':
-                perms.add(PosixFilePermission.OTHERS_WRITE);
-                break;
-            case '3':
-                perms.add(PosixFilePermission.OTHERS_EXECUTE);
-                perms.add(PosixFilePermission.OTHERS_WRITE);
-                break;
-            case '4':
-                perms.add(PosixFilePermission.OTHERS_READ);
-                break;
-            case '5':
-                perms.add(PosixFilePermission.OTHERS_READ);
-                perms.add(PosixFilePermission.OTHERS_EXECUTE);
-                break;
-            case '6':
-                perms.add(PosixFilePermission.OTHERS_READ);
-                perms.add(PosixFilePermission.OTHERS_WRITE);
-                break;
-            case '7':
-                perms.add(PosixFilePermission.OTHERS_READ);
-                perms.add(PosixFilePermission.OTHERS_WRITE);
-                perms.add(PosixFilePermission.OTHERS_EXECUTE);
-                break;
-        }
+        if (symbol == '1' || symbol == '3' || symbol == '5' || symbol == '7')
+            perms.add(PosixFilePermission.OTHERS_EXECUTE);
+        if (symbol == '2' || symbol == '3' || symbol == '6' || symbol == '7')
+            perms.add(PosixFilePermission.OTHERS_WRITE);
+        if (symbol == '4' || symbol == '5' || symbol == '6' || symbol == '7')
+            perms.add(PosixFilePermission.OTHERS_READ);
     }
 
     private Set<PosixFilePermission> processPerms(String perms) {
